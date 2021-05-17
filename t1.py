@@ -2,10 +2,11 @@ import glfw
 from OpenGL.GL import *
 import OpenGL.GL.shaders
 import numpy as np
+import math as math
 
 glfw.init()
 glfw.window_hint(glfw.VISIBLE, glfw.FALSE)
-window = glfw.create_window(720, 600, "Escala", None, None)
+window = glfw.create_window(720, 600, "transformation", None, None)
 glfw.make_context_current(window)
 
 vertex_code = """
@@ -92,10 +93,21 @@ R = 1.0
 G = 0.0
 B = 0.0
 
-# exemplo para matriz de translacao
+# tamanho
 s_x = 1.0
 s_y = 1.0
 s_z = 1.0
+
+# rotacao
+rad = 0.0
+s = math.sin(rad)
+c = math.cos(rad)
+
+# translacao
+t_x = 0.0
+t_y = 0.0
+t_z = 0.0
+    
 
 def mouse_event(window,button,action,mods):
     print('[mouse event] button =',button)
@@ -114,6 +126,25 @@ def mouse_event(window,button,action,mods):
     
 glfw.set_mouse_button_callback(window,mouse_event)
 
+def key_event(window,key,scancode,action,mods):
+    global rad, s, c, t_x, t_y, t_z
+    if key == 263:
+        rad += 0.05
+        if rad >= (2 * math.pi): rad = rad - (2 * math.pi)
+        s = math.sin(rad)
+        c = math.cos(rad)
+    if key == 262:
+        rad -= 0.05
+        if rad < 0: rad = (2 * math.pi) + rad
+        s = math.sin(rad)
+        c = math.cos(rad)
+    if key == 87: t_y += 0.05 #cima
+    if key == 83: t_y -= 0.05 #baixo
+    if key == 65: t_x -= 0.05 #esquerda
+    if key == 68: t_x += 0.05 #direita
+    
+glfw.set_key_callback(window,key_event)
+
 glfw.show_window(window)
 
 while not glfw.window_should_close(window):
@@ -124,13 +155,13 @@ while not glfw.window_should_close(window):
     glClearColor(1.0, 1.0, 1.0, 1.0)    
     
     #Draw Triangle
-    mat_escala = np.array([     s_x, 0.0, 0.0, 0.0, 
-                                0.0, s_y, 0.0, 0.0, 
-                                0.0, 0.0, s_z, 0.0, 
-                                0.0, 0.0, 0.0, 1.0], np.float32)
+    mat_transformation = np.array([     s_x * c, -(s_x * s), 0.0, (s_x * c * t_x) - (s_x * s * t_y), 
+                                        s_y * s, s_y * s_z, 0.0, (s_y * s * t_x) + (s_y * c * t_y), 
+                                        0.0, 0.0, s_z, s_z * t_z, 
+                                        0.0, 0.0, 0.0, 1.0], np.float32)
 
     loc = glGetUniformLocation(program, "mat_transformation")
-    glUniformMatrix4fv(loc, 1, GL_TRUE, mat_escala)
+    glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
     
     glDrawArrays(GL_TRIANGLES, 0, len(vertices))
     glUniform4f(loc_color, R, G, B, 1.0) ### modificando a cor do objeto!
