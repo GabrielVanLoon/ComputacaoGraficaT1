@@ -60,13 +60,44 @@ if not glGetProgramiv(program, GL_LINK_STATUS):
 glUseProgram(program)
 
 # preparando espaço para 3 vértices usando 2 coordenadas (x,y)
-vertices = np.zeros(3, [("position", np.float32, 2)])
+vertices = np.zeros(29, [("position", np.float32, 2)])
 
 # preenchendo as coordenadas de cada vértice
 vertices['position'] = [
-                            ( 0.0, +0.5), # vertice 0
-                            (-0.5, -0.5), # vertice 1
-                            (+0.5, -0.5) # vertice 2
+                            # carrinho
+                            (+3.0, +6.0), #laranja
+                            (+7.0, +3.0),
+                            (+6.0, -2.0),
+                            ( 0.0, -6.0),
+                            (-6.0, -2.0),
+                            (-7.0, +3.0),
+                            (-3.0, +6.0),
+
+                            (+3.0, +6.0), #preto
+                            (+4.5, +5.0),
+                            (+2.0, +1.5),
+                            (-2.0, +1.5),
+                            (-4.5, +5.0),
+                            (-3.0, +6.0),
+
+                            (+4.5, +5.0), #azul direita
+                            (+7.0, +3.0),
+                            (+6.5,  0.0),
+                            (+3.5,  0.0),
+                            (+2.0, +1.5),
+
+                            (-4.5, +5.0), #azul esquerda
+                            (-7.0, +3.0),
+                            (-6.5,  0.0),
+                            (-3.5,  0.0),
+                            (-2.0, +1.5),
+
+                            (+2.0, +1.5), #contorno smile preto
+                            (+3.5,  0.0),
+                            (+1.5, -4.0),
+                            (-1.5, -4.0),
+                            (-3.5,  0.0),
+                            (-2.0, +1.5),
                         ]
 
 # Request a buffer slot from GPU
@@ -163,8 +194,18 @@ while not glfw.window_should_close(window):
     loc = glGetUniformLocation(program, "mat_transformation")
     glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
     
-    glDrawArrays(GL_TRIANGLES, 0, len(vertices))
-    glUniform4f(loc_color, R, G, B, 1.0) ### modificando a cor do objeto!
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 7) # perfil
+    glUniform4f(loc_color, 0.0, 0.6, 0.2, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 7, 6) # cima
+    glUniform4f(loc_color, 0.0, 0.2, 1.0, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 13, 5) # azul direita
+    glDrawArrays(GL_TRIANGLE_FAN, 18, 5) # azul esquerda
+    glUniform4f(loc_color, 0.0, 0.0, 0.0, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 23, 6) # contorno smile preto
+    glUniform4f(loc_color, R, G, B, 1.0)
 
     glfw.swap_buffers(window)
 
