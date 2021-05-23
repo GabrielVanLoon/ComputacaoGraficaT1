@@ -1,27 +1,11 @@
 #!/usr/bin/env python3
+import numpy as np
 from OpenGL.GL import *
 import OpenGL.GL.shaders
-import numpy as np
-from .Shader import Shader
 
-base_vertex_code = """
-    attribute vec3 position;
-    varying   vec3 fPosition;
-    uniform   mat4 u_model_matrix;
+from src.shaders.Shader import Shader
+from src.shaders.BaseShader import vertex_code, fragment_code
 
-    void main(){ 
-        gl_Position = u_model_matrix * vec4(position, 1.0);
-        fPosition   = gl_Position.xyz;
-    }
-"""
-
-base_fragment_code = """
-    varying vec3 fPosition;
-
-    void main(){ 
-        gl_FragColor  = vec4(1.0, 0.0, 0.0, 1.0);
-    }
-"""
 
 class GameObject:
     """
@@ -33,7 +17,7 @@ class GameObject:
     de atributos e métodos estáticos (pertencentes à classe).
     """
 
-    shader_program  = Shader(base_vertex_code, base_fragment_code)
+    shader_program  = Shader(vertex_code, fragment_code)
     shader_offset = 0
     shader_vertices = [ 
         (-1.0,   1.0,  0.0),
@@ -64,9 +48,9 @@ class GameObject:
         self.rotate = rotate
         self.window_resolution = window_resolution
 
-        self.__gl_scale = [0.0, 0.0]
-        self.__gl_rotate = [0.0]
-        self.__gl_translate = [0.0, 0.0]
+        self._gl_scale = [0.0, 0.0]
+        self._gl_rotate = [0.0]
+        self._gl_translate = [0.0, 0.0]
 
         self.__configure_gl_variables()
 
@@ -78,11 +62,22 @@ class GameObject:
         
         Ex: posicao (300, 450) -> (0.0, 0.5) em uma tela de 600x600
         """
-        self.__gl_scale[0] = self.size[0]/self.window_resolution[0]
-        self.__gl_scale[1] = self.size[1]/self.window_resolution[1]
-        self.__gl_rotate   = self.rotate*(np.pi/180.0)
-        self.__gl_translate[0] = (self.position[0] - 0.5*self.window_resolution[0])/ (0.5*self.window_resolution[0])
-        self.__gl_translate[1] = (self.position[1] - 0.5*self.window_resolution[1])/ (0.5*self.window_resolution[1])
+        self._gl_scale[0] = self.size[0]/self.window_resolution[0]
+        self._gl_scale[1] = self.size[1]/self.window_resolution[1]
+        self._gl_rotate   = self.rotate*(np.pi/180.0)
+        self._gl_translate[0] = (self.position[0] - 0.5*self.window_resolution[0])/ (0.5*self.window_resolution[0])
+        self._gl_translate[1] = (self.position[1] - 0.5*self.window_resolution[1])/ (0.5*self.window_resolution[1])
+
+    def _generate_model_matrix(self) -> dict:
+        """
+        Calcula e retorna a matrix model para realizar as transformações no objeto
+        """
+        return [    
+            self._gl_scale[0]*np.cos(self._gl_rotate), self._gl_scale[1]*-np.sin(self._gl_rotate), 0.0, self._gl_translate[0], 
+            self._gl_scale[0]*np.sin(self._gl_rotate), self._gl_scale[1]* np.cos(self._gl_rotate), 0.0, self._gl_translate[1], 
+            0.0, 0.0, 1.0, 0.0, 
+            0.0, 0.0, 0.0, 1.0
+        ]
 
 
     def draw(self):
@@ -92,11 +87,7 @@ class GameObject:
         de posição, rotação e tamanho do objeto.
         """
         # Prepare the model transformation matrix
-        model_matrix = np.array([    
-            self.__gl_scale[0]*np.cos(self.__gl_rotate), self.__gl_scale[1]*-np.sin(self.__gl_rotate), 0.0, self.__gl_translate[0], 
-            self.__gl_scale[0]*np.sin(self.__gl_rotate), self.__gl_scale[1]* np.cos(self.__gl_rotate), 0.0, self.__gl_translate[1], 
-            0.0, 0.0, 1.0, 0.0, 
-            0.0, 0.0, 0.0, 1.0], np.float32)
+        model_matrix = np.array(self._generate_model_matrix(), np.float32)
 
         # Send final matrix to the GPU unit
         GameObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import glfw
-from OpenGL.GL import *
-from .GameObject import GameObject
 import numpy as np
+from OpenGL.GL import *
+
+
+from src.objects.GameObject import GameObject
+from src.objects.geometrics.TriangleObject import TriangleObject
 
 
 class GameController:
@@ -29,6 +32,7 @@ class GameController:
         self.__configure_objects()
         self.__configure_buffer()
 
+
     def __configure_window(self) -> None:
         """
         Internal function with the GLFW window and context configurations
@@ -41,15 +45,20 @@ class GameController:
 
         # Compile shaders after create context
         GameObject.shader_program.compile()
+        TriangleObject.shader_program.compile()
 
 
     def __configure_objects(self) -> None:
         """
         Start/Restart all objects used in the game
         """
-        self.__objects  += [ GameObject(position=(600,300), window_resolution=self.__glfw_resolution) ]
+        self.__objects  += [ GameObject(position=(300,300), window_resolution=self.__glfw_resolution) ]
         GameObject.shader_offset = len(self.__vertices)
         self.__vertices += GameObject.shader_vertices
+
+        self.__objects  += [ TriangleObject(position=(700,300), window_resolution=self.__glfw_resolution) ]
+        TriangleObject.shader_offset = len(self.__vertices)
+        self.__vertices += TriangleObject.shader_vertices
 
 
     def __configure_buffer(self) -> None:
@@ -60,6 +69,8 @@ class GameController:
         self.__buffer = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, self.__buffer)
         glBufferData(GL_ARRAY_BUFFER, self.__vertices.nbytes, self.__vertices, GL_STATIC_DRAW)
+
+
 
     def start(self) -> None:
         """
