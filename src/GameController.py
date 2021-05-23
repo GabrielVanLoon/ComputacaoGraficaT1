@@ -31,6 +31,10 @@ class GameController:
         self.__vertices = []
         self.__buffer = None
 
+        self.__glfw_keys = {}
+        self.__glfw_observe_keys = [glfw.KEY_W]
+        self.__glfw_buttons = {}
+
         self.__configure_objects()
         self.__configure_buffer()
 
@@ -44,6 +48,10 @@ class GameController:
         glfw.window_hint(glfw.RESIZABLE, glfw.FALSE)
         self.__glfw_window = glfw.create_window(self.__glfw_resolution[0], self.__glfw_resolution[1], self.__glfw_title, None, None)
         glfw.make_context_current(self.__glfw_window)
+
+        # Register handlers
+        glfw.set_key_callback(self.__glfw_window, self.__key_event_handler)
+        glfw.set_mouse_button_callback(self.__glfw_window, self.__mouse_event_handler)
 
         # Compile shaders of objects used in scene scheme
         for object in self.scheme:
@@ -77,6 +85,23 @@ class GameController:
         glBindBuffer(GL_ARRAY_BUFFER, self.__buffer)
         glBufferData(GL_ARRAY_BUFFER, self.__vertices.nbytes, self.__vertices, GL_STATIC_DRAW)
 
+
+    def __key_event_handler(self, window, key, scancode, action, mods):
+        """
+        Manipula os eventos de teclados lidos pelo GLFW e salva as mudanças de estado 
+        apenas das teclas de interesse para economizar memória não necessária
+        """
+        if key in self.__glfw_observe_keys:
+            self.__glfw_keys[key] = { "action": action, "code": scancode, "mods": mods }
+
+
+    def __mouse_event_handler(self, window, button, action, mods):
+        """
+        Manipula os eventos de mouse que, como são menores, não necessita de uma
+        seleção tão aguçada de quais estados salvar
+        """
+        self.__glfw_buttons[button] = { "action": action, "mods": mods }
+        
 
 
     def start(self) -> None:
