@@ -43,7 +43,7 @@ class GameObject:
         window_resolution: dupla de inteiros
             Representa o tamanho atual da tela (necessário para realizar algumas conversões)
         """
-        self.position = position                   
+        self.position = [position[0], position[1]]                   
         self.size = size
         self.rotate = rotate
         self.window_resolution = window_resolution
@@ -52,10 +52,10 @@ class GameObject:
         self._gl_rotate = [0.0]
         self._gl_translate = [0.0, 0.0]
 
-        self.__configure_gl_variables()
+        self._configure_gl_variables()
 
 
-    def __configure_gl_variables(self):
+    def _configure_gl_variables(self):
         """
         Atualiza as variáveis utilizadas para renderização (__gl_*) baseado nos valores
         das variáveis públicas. 
@@ -96,3 +96,11 @@ class GameObject:
         
         # Draw object steps
         glDrawArrays(GL_TRIANGLE_STRIP, GameObject.shader_offset, 4)
+
+    
+    def logic(self, keys={}, buttons={}) -> None:
+        """
+        Interface que permite a criação de lógicas a serem executadas pelo objeto
+        a cada iteração do jogo. Recebe os estados dos inputs.
+        """
+        pass

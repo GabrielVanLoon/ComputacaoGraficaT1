@@ -32,7 +32,7 @@ class GameController:
         self.__buffer = None
 
         self.__glfw_keys = {}
-        self.__glfw_observe_keys = [glfw.KEY_W]
+        self.__glfw_observe_keys = [glfw.KEY_W, glfw.KEY_S, glfw.KEY_A, glfw.KEY_D]
         self.__glfw_buttons = {}
 
         self.__configure_objects()
@@ -123,6 +123,13 @@ class GameController:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
             glClearColor(1.0, 1.0, 1.0, 1.0)
             
+            # Detect collisions in rigid object items
+            # to do
+
+            # Execute objects logics
+            for object_group in reversed(self.__objects):
+                for item in object_group["items"]:
+                    item.logic(keys=self.__glfw_keys, buttons=self.__glfw_buttons)
 
             # Foreach object group active the shader and draw items
             # Obs: Reversed because first groups have priority.
