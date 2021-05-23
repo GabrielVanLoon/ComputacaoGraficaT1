@@ -11,25 +11,35 @@ class Shader:
     """
 
 
-    def __init__(self, vertex_code = "", fragment_code = ""):
+    def __init__(self, vertex_code = "", fragment_code = "") -> None:
+        """
+        Inicia as configurações do shader, porém não compila pois para isso é 
+        necessário que o contexto da tela já tenha sido iniciado.
+        """
+        # Starting the attributes
+        self.vertex_code   = vertex_code
+        self.fragment_code = fragment_code
+        self.__program  = None
+        self.__uniforms = {}
+        self.__attributes = {}
+
+
+    def compile(self) -> None:
         """
         Build a shader program with the vertex and fragment code received. It also
         save previously all the uniforms locations used in the shader. 
         
         Obs: The vertex shader must have the `attribute vec3 position;`.
         """
-        # Starting the attributes
         self.__program  = glCreateProgram()
-        self.__uniforms = {}
-        self.__attributes = {}
 
         # Create the vertex and shader program
         vertex   = glCreateShader(GL_VERTEX_SHADER)
         fragment = glCreateShader(GL_FRAGMENT_SHADER)
 
         # Set shaders sources code
-        glShaderSource(vertex, vertex_code)
-        glShaderSource(fragment, fragment_code)
+        glShaderSource(vertex, self.vertex_code)
+        glShaderSource(fragment, self.fragment_code)
 
         # Compiling vertex shader
         glCompileShader(vertex)
@@ -58,27 +68,36 @@ class Shader:
         # Delete shaders (we don't need them anymore after compile)
         glDeleteShader(vertex)
         glDeleteShader(fragment)
+        self.vertex_code   = None
+        self.fragment_code = None
 
         # Save the position attrib location
         self.__attributes['position'] = glGetAttribLocation(self.__program, "position")
 
 
-    def use(self):
+    def use(self) -> None:
         """Activate the current shader program to be used in GPU."""
         glUseProgram(self.__program)
         glEnableVertexAttribArray(self.__attributes['position'])
         glVertexAttribPointer(self.__attributes['position'], 3, GL_FLOAT, False, 12, ctypes.c_void_p(0))
 
 
-    def setFloat(self, name, value):
+    def setFloat(self, name, value) -> None:
         """Uniform Helper"""
-        if not self.__uniforms[name]:
+        if name not in self.__uniforms.keys():
             self.__uniforms[name] = glGetUniformLocation(self.__program, name)
         glUniform1f(self.__uniforms[name], value)
 
 
-    def set3Float(self, name, value):
+    def set3Float(self, name, value) -> None:
         """Uniform Helper"""
-        if not self.__uniforms[name]:
+        if name not in self.__uniforms.keys():
             self.__uniforms[name] = glGetUniformLocation(self.__program, name)
         glUniform3f(self.__uniforms[name], value[0], value[1], value[2])
+
+
+    def set4fMatrix(self, name, value) -> None:
+        """Uniform Helper"""
+        if name not in self.__uniforms.keys():
+            self.__uniforms[name] = glGetUniformLocation(self.__program, name)
+        glUniformMatrix4fv(self.__uniforms[name], 1, GL_TRUE, value)
