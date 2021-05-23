@@ -16,7 +16,7 @@ class GameController:
     """
 
 
-    def __init__(self, title="Computer Graphics 101", width=600, height=600, enable3D=False) -> None:
+    def __init__(self, title="Computer Graphics 101", width=600, height=600, enable3D=False, scheme = []) -> None:
         """
         Set the program window configurations and other important variables
         """
@@ -24,6 +24,7 @@ class GameController:
         self.__glfw_title  = title
         self.__glfw_resolution  = (width, height)
         self.__glfw_enable3D = enable3D
+        self.scheme = scheme
         self.__configure_window()
         
         self.__objects = []
@@ -44,27 +45,27 @@ class GameController:
         self.__glfw_window = glfw.create_window(self.__glfw_resolution[0], self.__glfw_resolution[1], self.__glfw_title, None, None)
         glfw.make_context_current(self.__glfw_window)
 
-        # Compile shaders after create context
-        GameObject.shader_program.compile()
-        TriangleObject.shader_program.compile()
-        RectangleObject.shader_program.compile()
+        # Compile shaders of objects used in scene scheme
+        for object in self.scheme:
+            object["type"].shader_program.compile()
 
 
     def __configure_objects(self) -> None:
         """
         Start/Restart all objects used in the game
         """
-        self.__objects  += [ GameObject(position=(300,300), size=(400,200), rotate=45,  window_resolution=self.__glfw_resolution) ]
-        GameObject.shader_offset = len(self.__vertices)
-        self.__vertices += GameObject.shader_vertices
+        for object in self.scheme:
+            # Update Object offset and save vertices in program buffer
+            object["type"].shader_offset = len(self.__vertices)
+            self.__vertices += GameObject.shader_vertices
 
-        self.__objects  += [ TriangleObject(position=(700,300), window_resolution=self.__glfw_resolution) ]
-        TriangleObject.shader_offset = len(self.__vertices)
-        self.__vertices += TriangleObject.shader_vertices
-
-        self.__objects  += [ RectangleObject(position=(100,100), size=(50,50), rotate=15, window_resolution=self.__glfw_resolution) ]
-        RectangleObject.shader_offset = len(self.__vertices)
-        self.__vertices += RectangleObject.shader_vertices
+            # Create all desired object items
+            items = []
+            for item in object["items"]:
+                items.append(object["type"](position=item["position"], size=item["size"], rotate=item["rotate"], window_resolution=self.__glfw_resolution))
+            
+            # Append created items to objects
+            self.__objects.append({"type": object["type"], "items": items })
 
 
     def __configure_buffer(self) -> None:
@@ -97,10 +98,13 @@ class GameController:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
             glClearColor(1.0, 1.0, 1.0, 1.0)
             
-            # Draw objects in the screen
-            GameObject.shader_program.use()
-            for object in self.__objects:
-                object.draw()
+
+            # Foreach object group active the shader and draw items
+            # Obs: Reversed because first groups have priority.
+            for object_group in reversed(self.__objects):
+                object_group["type"].shader_program.use()
+                for item in object_group["items"]:
+                    item.draw()
 
             glfw.swap_buffers(self.__glfw_window)
         glfw.terminate()
