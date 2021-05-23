@@ -59,46 +59,111 @@ if not glGetProgramiv(program, GL_LINK_STATUS):
 # Make program the default program
 glUseProgram(program)
 
+num_vertices = 10 # define a "qualidade" do circulo
+
 # preparando espaço para 3 vértices usando 2 coordenadas (x,y)
-vertices = np.zeros(29, [("position", np.float32, 2)])
+vertices = np.zeros((45 + 4 * num_vertices), [("position", np.float32, 2)])
 
 # preenchendo as coordenadas de cada vértice
-vertices['position'] = [
-                            # carrinho
-                            (+3.0, +6.0), #laranja
-                            (+7.0, +3.0),
-                            (+6.0, -2.0),
-                            ( 0.0, -6.0),
-                            (-6.0, -2.0),
-                            (-7.0, +3.0),
-                            (-3.0, +6.0),
+vertices[0] = [+3.0, +6.0]  #laranja
+vertices[1] = [+7.0, +3.0]
+vertices[2] = [+6.0, -2.0]
+vertices[3] = [ 0.0, -6.0]
+vertices[4] = [-6.0, -2.0]
+vertices[5] = [-7.0, +3.0]
+vertices[6] = [-3.0, +6.0]
 
-                            (+3.0, +6.0), #preto
-                            (+4.5, +5.0),
-                            (+2.0, +1.5),
-                            (-2.0, +1.5),
-                            (-4.5, +5.0),
-                            (-3.0, +6.0),
+vertices[7] = [+3.0, +6.0]  #preto
+vertices[8] = [+4.5, +5.0]
+vertices[9] = [+2.0, +1.5]
+vertices[10] = [-2.0, +1.5]
+vertices[11] = [-4.5, +5.0]
+vertices[12] = [-3.0, +6.0]
 
-                            (+4.5, +5.0), #azul direita
-                            (+7.0, +3.0),
-                            (+6.5,  0.0),
-                            (+3.5,  0.0),
-                            (+2.0, +1.5),
+vertices[13] = [+4.5, +5.0] #azul direita
+vertices[14] = [+7.0, +3.0]
+vertices[15] = [+6.5,  0.0]
+vertices[16] = [+3.5,  0.0]
+vertices[17] = [+2.0, +1.5]
 
-                            (-4.5, +5.0), #azul esquerda
-                            (-7.0, +3.0),
-                            (-6.5,  0.0),
-                            (-3.5,  0.0),
-                            (-2.0, +1.5),
+vertices[18] = [-4.5, +5.0] #azul esquerda
+vertices[19] = [-7.0, +3.0]
+vertices[20] = [-6.5,  0.0]
+vertices[21] = [-3.5,  0.0]
+vertices[22] = [-2.0, +1.5]
 
-                            (+2.0, +1.5), #contorno smile preto
-                            (+3.5,  0.0),
-                            (+1.5, -4.0),
-                            (-1.5, -4.0),
-                            (-3.5,  0.0),
-                            (-2.0, +1.5),
-                        ]
+vertices[23] = [+2.0, +1.5] #contorno smile preto
+vertices[24] = [+3.5,  0.0]
+vertices[25] = [+1.5, -4.0]
+vertices[26] = [-1.5, -4.0]
+vertices[27] = [-3.5,  0.0]
+vertices[28] = [-2.0, +1.5]
+
+counter = 29
+radius = 0.5
+posx = 2.0
+posy = -0.5
+angle = 0.0
+for counter in range(29, 29 + num_vertices):
+    angle += 2*math.pi/num_vertices
+    x = math.cos(angle)*radius + posx   
+    y = math.sin(angle)*radius + posy
+    vertices[counter] = [x,y]
+
+counter = 39
+radius = 0.5
+posx = -2.0
+posy = -0.5
+angle = 0.0
+for counter in range(39, 39 + num_vertices):
+    angle += 2*math.pi/num_vertices
+    x = math.cos(angle)*radius + posx   
+    y = math.sin(angle)*radius + posy
+    vertices[counter] = [x,y]
+
+vertices[49] = [-1.0, -1.1]
+vertices[50] = [-0.9, -1.0]
+vertices[51] = [-0.3, -1.8]
+vertices[52] = [-0.25, -1.65]
+
+vertices[53] = [-0.3, -1.8]
+vertices[54] = [-0.4, -1.7]
+vertices[55] = [ 0.0, -1.4]
+vertices[56] = [ 0.0, -1.3]
+
+vertices[57] = [+0.3, -1.8]
+vertices[58] = [+0.4, -1.7]
+vertices[59] = [ 0.0, -1.4]
+vertices[60] = [ 0.0, -1.3]
+
+vertices[61] = [+1.0, -1.1]
+vertices[62] = [+0.9, -1.0]
+vertices[63] = [+0.3, -1.8]
+vertices[64] = [+0.25, -1.65]
+
+counter = 65
+radius = 6.0
+posx = -5.5
+posy = 0.0
+angle = math.pi/2
+for counter in range(65, 65 + num_vertices):
+    angle += math.pi/num_vertices
+    x = math.cos(angle)*radius*0.4 + posx   
+    y = math.sin(angle)*radius + posy
+    vertices[counter] = [x,y]
+
+counter = 75
+radius = 6.0
+posx = +5.5
+posy = 0.0
+angle = math.pi/2
+for counter in range(75, 75 + num_vertices):
+    angle += math.pi/num_vertices
+    x = -1*math.cos(angle)*radius*0.4 + posx
+    y = math.sin(angle)*radius + posy
+    vertices[counter] = [x,y]
+
+print(vertices)
 
 # Request a buffer slot from GPU
 buffer = glGenBuffers(1)
@@ -190,7 +255,7 @@ while not glfw.window_should_close(window):
                                         s_y * s, s_y * s_z, 0.0, (s_y * s * t_x) + (s_y * c * t_y), 
                                         0.0, 0.0, s_z, s_z * t_z, 
                                         0.0, 0.0, 0.0, 1.0], np.float32)
-
+                                    
     loc = glGetUniformLocation(program, "mat_transformation")
     glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
     
@@ -205,7 +270,31 @@ while not glfw.window_should_close(window):
     glUniform4f(loc_color, 0.0, 0.0, 0.0, 1.0)
 
     glDrawArrays(GL_TRIANGLE_FAN, 23, 6) # contorno smile preto
-    glUniform4f(loc_color, R, G, B, 1.0)
+    glUniform4f(loc_color, 0.5, 0.2, 0.4, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 29, num_vertices)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 29 + num_vertices, num_vertices)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 29 + 2 * num_vertices, 4)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 33 + 2 * num_vertices, 4)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 37 + 2 * num_vertices, 4)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 41 + 2 * num_vertices, 4)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 45 + 2 * num_vertices, num_vertices)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
+
+    glDrawArrays(GL_TRIANGLE_FAN, 45 + 3 * num_vertices, num_vertices)
+    glUniform4f(loc_color, 0.5, 0.6, 0.5, 1.0)
 
     glfw.swap_buffers(window)
 
