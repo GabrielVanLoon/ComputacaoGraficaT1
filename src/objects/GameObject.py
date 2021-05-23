@@ -68,13 +68,22 @@ class GameObject:
         self._gl_translate[0] = (self.position[0] - 0.5*self.window_resolution[0])/ (0.5*self.window_resolution[0])
         self._gl_translate[1] = (self.position[1] - 0.5*self.window_resolution[1])/ (0.5*self.window_resolution[1])
 
-    def _generate_model_matrix(self) -> dict:
+
+    def _generate_model_matrix(self, scale_first=False) -> list:
         """
         Calcula e retorna a matrix model para realizar as transformações no objeto
         """
+        # Translate * Rotate * Scale
+        # return [    
+        #     self._gl_scale[0]*np.cos(self._gl_rotate), self._gl_scale[1]*-np.sin(self._gl_rotate), 0.0, self._gl_translate[0], 
+        #     self._gl_scale[0]*np.sin(self._gl_rotate), self._gl_scale[1]* np.cos(self._gl_rotate), 0.0, self._gl_translate[1], 
+        #     0.0, 0.0, 1.0, 0.0, 
+        #     0.0, 0.0, 0.0, 1.0
+        # ]
+        # Translate * Scale * Rotate
         return [    
-            self._gl_scale[0]*np.cos(self._gl_rotate), self._gl_scale[1]*-np.sin(self._gl_rotate), 0.0, self._gl_translate[0], 
-            self._gl_scale[0]*np.sin(self._gl_rotate), self._gl_scale[1]* np.cos(self._gl_rotate), 0.0, self._gl_translate[1], 
+            self._gl_scale[0]*np.cos(self._gl_rotate), self._gl_scale[0]*-np.sin(self._gl_rotate), 0.0, self._gl_translate[0], 
+            self._gl_scale[1]*np.sin(self._gl_rotate), self._gl_scale[1]* np.cos(self._gl_rotate), 0.0, self._gl_translate[1], 
             0.0, 0.0, 1.0, 0.0, 
             0.0, 0.0, 0.0, 1.0
         ]

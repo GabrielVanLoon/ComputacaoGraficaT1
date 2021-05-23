@@ -52,7 +52,7 @@ class GameController:
         """
         Start/Restart all objects used in the game
         """
-        self.__objects  += [ GameObject(position=(300,300), window_resolution=self.__glfw_resolution) ]
+        self.__objects  += [ GameObject(position=(300,300), size=(400,200), rotate=45,  window_resolution=self.__glfw_resolution) ]
         GameObject.shader_offset = len(self.__vertices)
         self.__vertices += GameObject.shader_vertices
 
