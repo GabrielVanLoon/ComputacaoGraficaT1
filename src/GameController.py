@@ -6,6 +6,7 @@ from OpenGL.GL import *
 
 from src.objects.GameObject import GameObject
 from src.objects.geometrics.TriangleObject import TriangleObject
+from src.objects.geometrics.RectangleObject import RectangleObject
 
 
 class GameController:
@@ -46,6 +47,7 @@ class GameController:
         # Compile shaders after create context
         GameObject.shader_program.compile()
         TriangleObject.shader_program.compile()
+        RectangleObject.shader_program.compile()
 
 
     def __configure_objects(self) -> None:
@@ -59,6 +61,10 @@ class GameController:
         self.__objects  += [ TriangleObject(position=(700,300), window_resolution=self.__glfw_resolution) ]
         TriangleObject.shader_offset = len(self.__vertices)
         self.__vertices += TriangleObject.shader_vertices
+
+        self.__objects  += [ RectangleObject(position=(100,100), size=(50,50), rotate=15, window_resolution=self.__glfw_resolution) ]
+        RectangleObject.shader_offset = len(self.__vertices)
+        self.__vertices += RectangleObject.shader_vertices
 
 
     def __configure_buffer(self) -> None:
