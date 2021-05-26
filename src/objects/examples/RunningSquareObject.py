@@ -14,19 +14,19 @@ class RunningSquareObject(GameObject):
     """
 
     shader_program  = Shader(vertex_code, fragment_code)
-    shader_offset = 0
+    shader_offset   = 0
     shader_vertices = [ 
         (-1.0,   1.0,  0.0),
         (-1.0,  -1.0,  0.0),
         ( 1.0,   1.0,  0.0),
         ( 1.0,  -1.0,  0.0),
     ]
-
-
+    subscribe_keys = [glfw.KEY_A, glfw.KEY_D, glfw.KEY_W, glfw.KEY_S]
+    
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__delta_translate = 1  # Moves 1px each translation iteration
+        self.__delta_translate = 0.1  # Moves 1px each translation iteration
 
 
     def draw(self):

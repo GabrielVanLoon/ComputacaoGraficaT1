@@ -32,7 +32,7 @@ class GameController:
         self.__buffer = None
 
         self.__glfw_keys = {}
-        self.__glfw_observe_keys = [glfw.KEY_W, glfw.KEY_S, glfw.KEY_A, glfw.KEY_D]
+        self.__glfw_observe_keys = []
         self.__glfw_buttons = {}
 
         self.__configure_objects()
@@ -75,6 +75,10 @@ class GameController:
             # Append created items to objects
             self.__objects.append({"type": object["type"], "items": items })
 
+            # Configure observed keys
+            if hasattr(object["type"], "subscribe_keys"):
+                self.__glfw_observe_keys += object["type"].subscribe_keys
+
 
     def __configure_buffer(self) -> None:
         """
@@ -101,7 +105,6 @@ class GameController:
         seleção tão aguçada de quais estados salvar
         """
         self.__glfw_buttons[button] = { "action": action, "mods": mods }
-        
 
 
     def start(self) -> None:
