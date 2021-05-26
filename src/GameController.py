@@ -65,7 +65,7 @@ class GameController:
         for object in self.scheme:
             # Update Object offset and save vertices in program buffer
             object["type"].shader_offset = len(self.__vertices)
-            self.__vertices += GameObject.get_vertices()
+            self.__vertices += object["type"].get_vertices()
 
             # Create all desired object items
             items = []

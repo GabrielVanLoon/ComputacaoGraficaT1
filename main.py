@@ -5,6 +5,7 @@ from src.objects.geometrics.SquareObject import SquareObject
 from src.objects.geometrics.TriangleObject import TriangleObject 
 from src.objects.geometrics.RectangleObject import RectangleObject 
 from src.objects.examples.RunningSquareObject import RunningSquareObject
+from src.objects.examples.BoucingBallObject import BoucingBallObject
 
 
 def main():
@@ -16,6 +17,13 @@ def main():
                 { "position":(50,50), "size":(100,100), "rotate":0 },
             ] 
         },
+        {
+            "type": BoucingBallObject,
+            "items": [
+                { "position":(50,50), "size":(100,100), "rotate":0 },
+            ] 
+        },
+
         {
             "type": SquareObject,
             "items": [
