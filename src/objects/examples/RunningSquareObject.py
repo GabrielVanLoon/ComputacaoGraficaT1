@@ -61,10 +61,39 @@ class RunningSquareObject(GameObject):
         Atualiza as posicoes do quadrado com as teclas AWSD 
         """ 
 
+        # Horizontal movement
+        collision = False
+        last_position = self.position[0]
+
         self.position[0] -= keys.get(glfw.KEY_A, {"action": 0})["action"] * self.__delta_translate
         self.position[0] += keys.get(glfw.KEY_D, {"action": 0})["action"] * self.__delta_translate
+        self.configure_hitbox()
+       
+        for item in objects: 
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                break
+        
+        if collision:
+            self.position[0] = last_position
+
+        # Vertical movement
+        collision = False
+        last_position = self.position[1]
+        
         self.position[1] -= keys.get(glfw.KEY_S, {"action": 0})["action"] * self.__delta_translate
         self.position[1] += keys.get(glfw.KEY_W, {"action": 0})["action"] * self.__delta_translate
-        
         self.configure_hitbox()
+
+        for item in objects: 
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                break
+
+        if collision:
+            self.position[1] = last_position
+            self.configure_hitbox()
+        
         self._configure_gl_variables()
