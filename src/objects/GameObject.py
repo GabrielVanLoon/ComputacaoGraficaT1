@@ -18,13 +18,21 @@ class GameObject:
     """
 
     shader_program  = Shader(vertex_code, fragment_code)
-    shader_offset = 0
+    shader_offset   = 0
     shader_vertices = [ 
         (-1.0,   1.0,  0.0),
         (-1.0,  -1.0,  0.0),
         ( 1.0,   1.0,  0.0),
         ( 1.0,  -1.0,  0.0),
     ]
+
+
+    def get_vertices():
+        """
+        Em objetos básicos basicamente retorna o valor do array shader_vertices, mas pode ser usado
+        para gerar vertices de forma dinâmica.
+        """
+        return GameObject.shader_vertices
 
 
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
@@ -43,7 +51,7 @@ class GameObject:
         window_resolution: dupla de inteiros
             Representa o tamanho atual da tela (necessário para realizar algumas conversões)
         """
-        self.position = position                   
+        self.position = [position[0], position[1]]                   
         self.size = size
         self.rotate = rotate
         self.window_resolution = window_resolution
@@ -52,10 +60,12 @@ class GameObject:
         self._gl_rotate = [0.0]
         self._gl_translate = [0.0, 0.0]
 
-        self.__configure_gl_variables()
+        self.object_hitbox = None
+
+        self._configure_gl_variables()
 
 
-    def __configure_gl_variables(self):
+    def _configure_gl_variables(self):
         """
         Atualiza as variáveis utilizadas para renderização (__gl_*) baseado nos valores
         das variáveis públicas. 
@@ -73,13 +83,6 @@ class GameObject:
         """
         Calcula e retorna a matrix model para realizar as transformações no objeto
         """
-        # Translate * Rotate * Scale
-        # return [    
-        #     self._gl_scale[0]*np.cos(self._gl_rotate), self._gl_scale[1]*-np.sin(self._gl_rotate), 0.0, self._gl_translate[0], 
-        #     self._gl_scale[0]*np.sin(self._gl_rotate), self._gl_scale[1]* np.cos(self._gl_rotate), 0.0, self._gl_translate[1], 
-        #     0.0, 0.0, 1.0, 0.0, 
-        #     0.0, 0.0, 0.0, 1.0
-        # ]
         # Translate * Scale * Rotate
         return [    
             self._gl_scale[0]*np.cos(self._gl_rotate), self._gl_scale[0]*-np.sin(self._gl_rotate), 0.0, self._gl_translate[0], 
@@ -88,6 +91,14 @@ class GameObject:
             0.0, 0.0, 0.0, 1.0
         ]
 
+
+    def configure_hitbox(self) -> None:
+        """
+        Permite que certor objetos tenham um objeto hitbox configurado e instânciado
+        na propriedade self.object_hitbox.
+        """
+        pass
+    
 
     def draw(self):
         """
@@ -103,3 +114,11 @@ class GameObject:
         
         # Draw object steps
         glDrawArrays(GL_TRIANGLE_STRIP, GameObject.shader_offset, 4)
+
+    
+    def logic(self, keys={}, buttons={}, objects={}) -> None:
+        """
+        Interface que permite a criação de lógicas a serem executadas pelo objeto
+        a cada iteração do jogo. Recebe os estados dos inputs.
+        """
+        pass

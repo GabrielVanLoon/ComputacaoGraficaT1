@@ -30,6 +30,11 @@ class GameController:
         self.__objects = []
         self.__vertices = []
         self.__buffer = None
+        self.__solid_objects = []
+
+        self.__glfw_keys = {}
+        self.__glfw_observe_keys = []
+        self.__glfw_buttons = {}
 
         self.__configure_objects()
         self.__configure_buffer()
@@ -45,6 +50,10 @@ class GameController:
         self.__glfw_window = glfw.create_window(self.__glfw_resolution[0], self.__glfw_resolution[1], self.__glfw_title, None, None)
         glfw.make_context_current(self.__glfw_window)
 
+        # Register handlers
+        glfw.set_key_callback(self.__glfw_window, self.__key_event_handler)
+        glfw.set_mouse_button_callback(self.__glfw_window, self.__mouse_event_handler)
+
         # Compile shaders of objects used in scene scheme
         for object in self.scheme:
             object["type"].shader_program.compile()
@@ -57,15 +66,26 @@ class GameController:
         for object in self.scheme:
             # Update Object offset and save vertices in program buffer
             object["type"].shader_offset = len(self.__vertices)
-            self.__vertices += GameObject.shader_vertices
+            self.__vertices += object["type"].get_vertices()
 
             # Create all desired object items
             items = []
             for item in object["items"]:
                 items.append(object["type"](position=item["position"], size=item["size"], rotate=item["rotate"], window_resolution=self.__glfw_resolution))
-            
+                
+                # If is solid create a reference in the solid objects array
+                if item.get("props", {"hitbox": False})["hitbox"]:
+                    items[-1].configure_hitbox()
+                    if items[-1].object_hitbox != None:
+                        self.__solid_objects.append(items[-1])
+
+
             # Append created items to objects
             self.__objects.append({"type": object["type"], "items": items })
+
+            # Configure observed keys
+            if hasattr(object["type"], "subscribe_keys"):
+                self.__glfw_observe_keys += object["type"].subscribe_keys
 
 
     def __configure_buffer(self) -> None:
@@ -77,6 +97,22 @@ class GameController:
         glBindBuffer(GL_ARRAY_BUFFER, self.__buffer)
         glBufferData(GL_ARRAY_BUFFER, self.__vertices.nbytes, self.__vertices, GL_STATIC_DRAW)
 
+
+    def __key_event_handler(self, window, key, scancode, action, mods):
+        """
+        Manipula os eventos de teclados lidos pelo GLFW e salva as mudanças de estado 
+        apenas das teclas de interesse para economizar memória não necessária
+        """
+        if key in self.__glfw_observe_keys:
+            self.__glfw_keys[key] = { "action": action, "code": scancode, "mods": mods }
+
+
+    def __mouse_event_handler(self, window, button, action, mods):
+        """
+        Manipula os eventos de mouse que, como são menores, não necessita de uma
+        seleção tão aguçada de quais estados salvar
+        """
+        self.__glfw_buttons[button] = { "action": action, "mods": mods }
 
 
     def start(self) -> None:
@@ -97,7 +133,17 @@ class GameController:
             else:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
             glClearColor(1.0, 1.0, 1.0, 1.0)
-            
+
+
+            # Execute objects logics, if object is solid pass all solid objects to 
+            # be used in the collision logics calculation
+            for object_group in reversed(self.__objects):
+                for item in object_group["items"]:
+                    if item.object_hitbox == None:
+                        item.logic(keys=self.__glfw_keys, buttons=self.__glfw_buttons)
+                    else:
+                        item.logic(keys=self.__glfw_keys, buttons=self.__glfw_buttons, objects=self.__solid_objects)
+
 
             # Foreach object group active the shader and draw items
             # Obs: Reversed because first groups have priority.
