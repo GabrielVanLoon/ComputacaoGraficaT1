@@ -14,37 +14,36 @@ def main():
         {
             "type": RunningSquareObject,
             "items": [
-                { "position":(50,50), "size":(100,100), "rotate":0 },
+                { "position":(500,500), "size":(200,200), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         {
             "type": BoucingBallObject,
             "items": [
-                { "position":(50,50), "size":(100,100), "rotate":0 },
+                { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True }},
             ] 
         },
-
-        {
-            "type": SquareObject,
-            "items": [
-                { "position":(300,300), "size":(50,50), "rotate":0 },
-                { "position":(300,400), "size":(50,50), "rotate":45 },
-                { "position":(300,100), "size":(100,100), "rotate":15 },
-            ] 
-        },
-        {
-            "type": TriangleObject,
-            "items": [
-                { "position":(600,300), "size":(300,300), "rotate":0 },
-                { "position":(900,300), "size":(600,300), "rotate":70 },
-            ] 
-        },
-        {
-            "type": RectangleObject,
-            "items": [
-                { "position":(900,300), "size":(200,200), "rotate":0 },
-            ] 
-        },
+        # {
+        #     "type": SquareObject,
+        #     "items": [
+        #         { "position":(300,300), "size":(50,50), "rotate":0 },
+        #         { "position":(300,400), "size":(50,50), "rotate":45 },
+        #         { "position":(300,100), "size":(100,100), "rotate":15 },
+        #     ] 
+        # },
+        # {
+        #     "type": TriangleObject,
+        #     "items": [
+        #         { "position":(600,300), "size":(300,300), "rotate":0 },
+        #         { "position":(900,300), "size":(600,300), "rotate":70 },
+        #     ] 
+        # },
+        # {
+        #     "type": RectangleObject,
+        #     "items": [
+        #         { "position":(900,300), "size":(200,200), "rotate":0 },
+        #     ] 
+        # },
     ]
 
     game = GameController(title="Testing Game Controller", width=1200, height=600, enable3D=False, scheme=scene_scheme)

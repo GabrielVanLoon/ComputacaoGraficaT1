@@ -10,6 +10,7 @@ from src.shaders.BaseShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
 from src.helpers.vertex import generate_circle_vertexes
 from src.helpers.collisions import hitbox_window_collider
+from src.colliders.Hitbox import Hitbox
 
 class BoucingBallObject(GameObject):
     """
@@ -33,10 +34,21 @@ class BoucingBallObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__delta_translate = 0.5  # Moves 0.1 px each translation iteration
+        self.__delta_translate = 0.05  # Moves 0.1 px each translation iteration
         self.__delta_direction = np.array([1.0, 0.7], dtype=np.float) # Initial direction
         self.__delta_direction = self.__delta_direction / np.linalg.norm(self.__delta_direction)
-        
+    
+
+    def configure_hitbox(self) -> None:
+        """Define a box type Hitbox"""
+        box_values = [ self.position[0]-self.size[0]/2, self.position[1]-self.size[1]/2, 
+                        self.size[0], self.size[1] ]
+
+        if self.object_hitbox == None:
+            self.object_hitbox = Hitbox("box", box_values)
+        else: 
+            self.object_hitbox.update_values(box_values)
+
 
     def draw(self):
         """
@@ -52,17 +64,45 @@ class BoucingBallObject(GameObject):
         glDrawArrays(GL_TRIANGLE_FAN, BoucingBallObject.shader_offset, 32)
 
 
-    def logic(self, keys={}, buttons={}) -> None:
+    def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
         Atualiza as posicoes do quadrado com as teclas AWSD 
         """ 
 
+        # Horizontal movement
+        collision = False
+        last_position = self.position[0]
+
         self.position[0] += self.__delta_translate * self.__delta_direction[0]
-        self.position[1] += self.__delta_translate * self.__delta_direction[1]
-        
-        collision, reaction_vector = hitbox_window_collider(self.position, self.size, self.window_resolution)
+        self.configure_hitbox()
+
+        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
+        for item in objects: 
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                break
 
         if collision:
-            self.__delta_direction *= reaction_vector
+            self.position[0] = last_position
+            self.__delta_direction[0] *= -1.0
+
+        # Vertical movement
+        collision = False
+        last_position = self.position[1]
+
+        self.position[1] += self.__delta_translate * self.__delta_direction[1]
+        self.configure_hitbox()
+
+        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
+        for item in objects: 
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                break
+
+        if collision:
+            self.position[1] = last_position
+            self.__delta_direction[1] *= -1.0
 
         self._configure_gl_variables()

@@ -18,7 +18,7 @@ class GameObject:
     """
 
     shader_program  = Shader(vertex_code, fragment_code)
-    shader_offset = 0
+    shader_offset   = 0
     shader_vertices = [ 
         (-1.0,   1.0,  0.0),
         (-1.0,  -1.0,  0.0),
@@ -60,6 +60,8 @@ class GameObject:
         self._gl_rotate = [0.0]
         self._gl_translate = [0.0, 0.0]
 
+        self.object_hitbox = None
+
         self._configure_gl_variables()
 
 
@@ -90,6 +92,14 @@ class GameObject:
         ]
 
 
+    def configure_hitbox(self) -> None:
+        """
+        Permite que certor objetos tenham um objeto hitbox configurado e instânciado
+        na propriedade self.object_hitbox.
+        """
+        pass
+    
+
     def draw(self):
         """
         Assume que o shader do objeto atual já foi ativado e realiza os desenhos na tela. 
@@ -106,7 +116,7 @@ class GameObject:
         glDrawArrays(GL_TRIANGLE_STRIP, GameObject.shader_offset, 4)
 
     
-    def logic(self, keys={}, buttons={}) -> None:
+    def logic(self, keys={}, buttons={}, objects={}) -> None:
         """
         Interface que permite a criação de lógicas a serem executadas pelo objeto
         a cada iteração do jogo. Recebe os estados dos inputs.

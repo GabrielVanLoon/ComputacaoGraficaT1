@@ -7,6 +7,7 @@ import glfw
 from src.shaders.Shader import Shader
 from src.shaders.BaseShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
+from src.colliders.Hitbox import Hitbox
 
 class RunningSquareObject(GameObject):
     """
@@ -23,10 +24,22 @@ class RunningSquareObject(GameObject):
     ]
     subscribe_keys = [glfw.KEY_A, glfw.KEY_D, glfw.KEY_W, glfw.KEY_S]
     
+
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
         self.__delta_translate = 0.1  # Moves 1px each translation iteration
+
+
+    def configure_hitbox(self) -> None:
+        """Define a box type Hitbox"""
+        box_values = [ self.position[0]-self.size[0]/2, self.position[1]-self.size[1]/2, 
+                        self.size[0], self.size[1] ]
+
+        if self.object_hitbox == None:
+            self.object_hitbox = Hitbox("box", box_values)
+        else: 
+            self.object_hitbox.update_values(box_values)
 
 
     def draw(self):
@@ -43,7 +56,7 @@ class RunningSquareObject(GameObject):
         glDrawArrays(GL_TRIANGLE_STRIP, RunningSquareObject.shader_offset, 4)
 
 
-    def logic(self, keys={}, buttons={}) -> None:
+    def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
         Atualiza as posicoes do quadrado com as teclas AWSD 
         """ 
@@ -52,5 +65,6 @@ class RunningSquareObject(GameObject):
         self.position[0] += keys.get(glfw.KEY_D, {"action": 0})["action"] * self.__delta_translate
         self.position[1] -= keys.get(glfw.KEY_S, {"action": 0})["action"] * self.__delta_translate
         self.position[1] += keys.get(glfw.KEY_W, {"action": 0})["action"] * self.__delta_translate
-
+        
+        self.configure_hitbox()
         self._configure_gl_variables()

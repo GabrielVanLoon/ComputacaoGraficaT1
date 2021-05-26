@@ -30,6 +30,7 @@ class GameController:
         self.__objects = []
         self.__vertices = []
         self.__buffer = None
+        self.__solid_objects = []
 
         self.__glfw_keys = {}
         self.__glfw_observe_keys = []
@@ -71,7 +72,14 @@ class GameController:
             items = []
             for item in object["items"]:
                 items.append(object["type"](position=item["position"], size=item["size"], rotate=item["rotate"], window_resolution=self.__glfw_resolution))
-            
+                
+                # If is solid create a reference in the solid objects array
+                if item.get("props", {"hitbox": False})["hitbox"]:
+                    items[-1].configure_hitbox()
+                    if items[-1].object_hitbox != None:
+                        self.__solid_objects.append(items[-1])
+
+
             # Append created items to objects
             self.__objects.append({"type": object["type"], "items": items })
 
@@ -125,14 +133,17 @@ class GameController:
             else:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
             glClearColor(1.0, 1.0, 1.0, 1.0)
-            
-            # Detect collisions in rigid object items
-            # to do
 
-            # Execute objects logics
+
+            # Execute objects logics, if object is solid pass all solid objects to 
+            # be used in the collision logics calculation
             for object_group in reversed(self.__objects):
                 for item in object_group["items"]:
-                    item.logic(keys=self.__glfw_keys, buttons=self.__glfw_buttons)
+                    if item.object_hitbox == None:
+                        item.logic(keys=self.__glfw_keys, buttons=self.__glfw_buttons)
+                    else:
+                        item.logic(keys=self.__glfw_keys, buttons=self.__glfw_buttons, objects=self.__solid_objects)
+
 
             # Foreach object group active the shader and draw items
             # Obs: Reversed because first groups have priority.
