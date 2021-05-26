@@ -63,7 +63,7 @@ glUseProgram(program)
 vertices = np.zeros(46, [("position", np.float32, 2)])
 
 # preenchendo as coordenadas de cada vértice
-vertices[0] = [-0.7, +0.2]  #parede sage
+vertices[0] = [-0.7, +0.2]  #multiplicar por 1.25
 vertices[1] = [-0.7, -0.2]
 vertices[2] = [+0.8, +0.2]
 vertices[3] = [+0.8, -0.2]
