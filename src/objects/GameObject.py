@@ -27,6 +27,14 @@ class GameObject:
     ]
 
 
+    def get_vertices():
+        """
+        Em objetos básicos basicamente retorna o valor do array shader_vertices, mas pode ser usado
+        para gerar vertices de forma dinâmica.
+        """
+        return GameObject.shader_vertices
+
+
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         """
         Cria um objeto básico com as configurações de posicionamento informadas. a conversão
