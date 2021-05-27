@@ -53,6 +53,7 @@ class ParedeSageObject(GameObject):
         self.__move_direction  = 0 if self.size[0] >= self.size[1] else 1
         self.__delta_translate = 0.1  # Move 1 px each active iteration
 
+
     def configure_hitbox(self) -> None:
         """Define a hitbox"""
 

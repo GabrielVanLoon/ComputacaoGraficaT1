@@ -8,6 +8,7 @@ from src.shaders.Shader import Shader
 from src.shaders.BaseShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
 from src.colliders.Hitbox import Hitbox
+from src.helpers.collisions import hitbox_window_collider
 
 class GateObject(GameObject):
     """
@@ -74,6 +75,11 @@ class GateObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
+        self.__move_direction  = 0 if self.size[0] >= self.size[1] else 1
+        self.__delta_shrink = 0.1  # diminui/aumenta 0.1 px por iteração
+        self.__original_size = np.array([size[0], size[1]], dtype=np.float)
+        self.__original_position = np.array([position[0], position[1]], dtype=np.float)
+
 
     def configure_hitbox(self) -> None:
         """Define a hitbox"""
@@ -115,7 +121,44 @@ class GateObject(GameObject):
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
-        Portão que realiza downscale no eixo de comprimento quando 
-        pressionado e retorna lentamente ao tamanho normal quando não.
+        Portão que se alonga ou estica no eixo de maior comprimento. 
+        Porém mantém um ponto fixo de referência no topo/direita.
         """
-        return 
+
+        # Salvando estado anterior
+        collision = False
+        last_position = self.position[self.__move_direction]
+        last_size     = self.size[self.__move_direction]
+        
+        # Realiza o movimento 
+        reference = self.__original_position[self.__move_direction] - self.__original_size[self.__move_direction]/2.0
+
+        self.size[self.__move_direction] += buttons.get(glfw.MOUSE_BUTTON_LEFT, {"action": 0})["action"] * self.__delta_shrink
+        self.size[self.__move_direction] -= buttons.get(glfw.MOUSE_BUTTON_RIGHT, {"action": 0})["action"] * self.__delta_shrink
+        
+        # Impede ser menor que 10% ou maior que o original
+        if self.size[self.__move_direction] < 0.1*self.__original_size[self.__move_direction]:
+            self.size[self.__move_direction] = 0.1*self.__original_size[self.__move_direction]
+        elif self.size[self.__move_direction] > self.__original_size[self.__move_direction]:
+            self.size[self.__move_direction]  = self.__original_size[self.__move_direction]
+
+        # Atualiza a posição
+        self.position[self.__move_direction] = (reference + self.size[self.__move_direction])/2.0
+        self.configure_hitbox()
+
+        # Verificando se o movimento é válido
+        # collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)
+        for item in objects: 
+            if collision:
+                break
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+        
+        # Se colidiu cancela o movimento e retorna estado anterior
+        if collision:
+            self.position[self.__move_direction] = last_position
+            self.size[self.__move_direction] = last_size
+            self.configure_hitbox()
+
+        self._configure_gl_variables()
+        

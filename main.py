@@ -28,73 +28,44 @@ def main():
                 { "position":(50,50), "size":(70,70), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
-        # {
-        #     "type": BoxObject,
-        #     "items": [
-        #         { "position":(50,550), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
-        #     ] 
-        # },
-        # {
-        #     "type": ContainerObject,
-        #     "items": [
-        #         { "position":(50,450), "size":(0.35*100,100), "rotate":90, "props": { "hitbox": True } },
-        #     ] 
-        # },
+        {
+            "type": BoxObject,
+            "items": [
+                { "position":(50,550), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": ContainerObject,
+            "items": [
+                { "position":(300,450), "size":(0.35*100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
         {
             "type": ParedeSageObject,
             "items": [
                 { "position":(50,450), "size":(100,100*.4), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
-        # {
-        #     "type": GateObject,
-        #     "items": [
-        #         { "position":(50,350), "size":(60,100), "rotate":0, "props": { "hitbox": True } },
-        #     ] 
-        # },
-        # {
-        #     "type": RotatorObject,
-        #     "items": [
-        #         { "position":(50,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
-        #     ] 
-        # },
+        {
+            "type": GateObject,
+            "items": [
+                { "position":(51,350), "size":(100,60), "rotate":90, "props": { "hitbox": True } },
+                { "position":(350,350), "size":(100,60), "rotate":90, "props": { "hitbox": True } },
+                { "position":(400,400), "size":(60,100), "rotate":0, "props": { "hitbox": True } },
+                 { "position":(600,500), "size":(10,10), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": RotatorObject,
+            "items": [
+                { "position":(500,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+                { "position":(600,250), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
         # {
         #     "type": FlamesObject,
         #     "items": [
         #         { "position":(50,350), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
-        #     ] 
-        # },
-        # {
-        #     "type": RunningSquareObject,
-        #     "items": [
-        #         { "position":(500,500), "size":(200,200), "rotate":0, "props": { "hitbox": True } },
-        #     ] 
-        # },
-        # {
-        #     "type": BoucingBallObject,
-        #     "items": [
-        #         { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True }},
-        #     ] 
-        # },
-        # {
-        #     "type": SquareObject,
-        #     "items": [
-        #         { "position":(300,300), "size":(50,50), "rotate":0 },
-        #         { "position":(300,400), "size":(50,50), "rotate":45 },
-        #         { "position":(300,100), "size":(100,100), "rotate":15 },
-        #     ] 
-        # },
-        # {
-        #     "type": TriangleObject,
-        #     "items": [
-        #         { "position":(600,300), "size":(300,300), "rotate":0 },
-        #         { "position":(900,300), "size":(600,300), "rotate":70 },
-        #     ] 
-        # },
-        # {
-        #     "type": RectangleObject,
-        #     "items": [
-        #         { "position":(900,300), "size":(200,200), "rotate":0 },
         #     ] 
         # },
     ]
