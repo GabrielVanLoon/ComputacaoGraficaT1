@@ -63,62 +63,62 @@ glUseProgram(program)
 vertices = np.zeros(46, [("position", np.float32, 2)])
 
 # preenchendo as coordenadas de cada vértice
-vertices[0] = [-0.7, +0.2]  #multiplicar por 1.25
-vertices[1] = [-0.7, -0.2]
-vertices[2] = [+0.8, +0.2]
-vertices[3] = [+0.8, -0.2]
+vertices[0] = [-0.875, +0.25]  #multiplicar por 1.25
+vertices[1] = [-0.875, -0.25]
+vertices[2] = [+1.0, +0.25]
+vertices[3] = [+1.0, -0.25]
 
-vertices[4] = [-0.6, +0.18] # K
-vertices[5] = [-0.6, -0.18]
-vertices[6] = [-0.5, +0.18]
-vertices[7] = [-0.5, -0.18]
+vertices[4] = [-0.75, +0.225] # K
+vertices[5] = [-0.75, -0.225]
+vertices[6] = [-0.625, +0.225]
+vertices[7] = [-0.625, -0.225]
 
-vertices[8] = [-0.3, -0.18] # K
-vertices[9] = [-0.2, -0.18]
-vertices[10] = [-0.5,  0.0]
-vertices[11] = [-0.4,  0.0]
-vertices[12] = [-0.3, +0.18]
-vertices[13] = [-0.2, +0.18]
+vertices[8] = [-0.375, -0.225] # K
+vertices[9] = [-0.25, -0.225]
+vertices[10] = [-0.625,  0.0]
+vertices[11] = [-0.5,  0.0]
+vertices[12] = [-0.375, +0.225]
+vertices[13] = [-0.25, +0.225]
 
-vertices[14] = [-0.1, +0.18]    # N
-vertices[15] = [ 0.0, +0.18]
-vertices[16] = [-0.1, -0.18]
-vertices[17] = [ 0.0, -0.18]
+vertices[14] = [-0.125, +0.225]    # N
+vertices[15] = [ 0.0, +0.225]
+vertices[16] = [-0.125, -0.225]
+vertices[17] = [ 0.0, -0.225]
 
-vertices[18] = [ 0.0, +0.18]    # N
+vertices[18] = [ 0.0, +0.225]    # N
 vertices[19] = [ 0.0, +0.0]
-vertices[20] = [+0.1, -0.0]
-vertices[21] = [+0.1, -0.18]
+vertices[20] = [+0.125, -0.0]
+vertices[21] = [+0.125, -0.225]
 
-vertices[22] = [+0.1, -0.18]    # N
-vertices[23] = [+0.2, -0.18]
-vertices[24] = [+0.1, +0.18]
-vertices[25] = [+0.2, +0.18]
+vertices[22] = [+0.125, -0.225]    # N
+vertices[23] = [+0.25, -0.225]
+vertices[24] = [+0.125, +0.225]
+vertices[25] = [+0.25, +0.225]
 
-vertices[26] = [+0.7, +0.18]    # G
-vertices[27] = [+0.3, +0.18]
-vertices[28] = [+0.7, +0.10]
-vertices[29] = [+0.3, +0.10]
+vertices[26] = [+0.875, +0.225]    # G
+vertices[27] = [+0.375, +0.225]
+vertices[28] = [+0.875, +0.125]
+vertices[29] = [+0.375, +0.125]
 
-vertices[30] = [+0.3, +0.18]    # G
-vertices[31] = [+0.4, +0.18]
-vertices[32] = [+0.3, -0.18]
-vertices[33] = [+0.4, -0.18]
+vertices[30] = [+0.375, +0.225]    # G
+vertices[31] = [+0.5, +0.225]
+vertices[32] = [+0.375, -0.225]
+vertices[33] = [+0.5, -0.225]
 
-vertices[34] = [+0.3, -0.18]    # G
-vertices[35] = [+0.3, -0.10]
-vertices[36] = [+0.7, -0.18]
-vertices[37] = [+0.7, -0.10]
+vertices[34] = [+0.375, -0.225]    # G
+vertices[35] = [+0.375, -0.125]
+vertices[36] = [+0.875, -0.225]
+vertices[37] = [+0.875, -0.125]
 
-vertices[38] = [+0.7, -0.18]   # G
-vertices[39] = [+0.6, -0.18]
-vertices[40] = [+0.7, +0.03]
-vertices[41] = [+0.6, +0.03]
+vertices[38] = [+0.875, -0.225]   # G
+vertices[39] = [+0.75, -0.225]
+vertices[40] = [+0.875, +0.0375]
+vertices[41] = [+0.75, +0.0375]
 
-vertices[42] = [+0.7, +0.03]   # G
-vertices[43] = [+0.7, -0.05]
-vertices[44] = [+0.5, +0.03]
-vertices[45] = [+0.5, -0.05]
+vertices[42] = [+0.875, +0.0375]   # G
+vertices[43] = [+0.875, -0.0625]
+vertices[44] = [+0.625, +0.0375]
+vertices[45] = [+0.625, -0.0625]
 
 print(vertices)
 
@@ -216,38 +216,20 @@ while not glfw.window_should_close(window):
     loc = glGetUniformLocation(program, "mat_transformation")
     glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
     
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4) # esquerda
-    glUniform4f(loc_color, 0.4, 0.6, 0.2, 1.0)
+    glUniform4f(loc_color, 0.729, 0.596, 0.592, 1.0)
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4) # container
 
+    glUniform4f(loc_color, 0.882, 0.835, 0.921, 1.0)
     glDrawArrays(GL_TRIANGLE_STRIP, 4, 4) # K
-    glUniform4f(loc_color, 0.3, 1.0, 0.2, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 8, 6) # K
-    glUniform4f(loc_color, 0.2, 0.4, 0.5, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 14, 4) # N
-    glUniform4f(loc_color, 0.1, 0.1, 0.1, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 18, 4) # N
-    glUniform4f(loc_color, 0.2, 0.5, 0.5, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 22, 4) # N
-    glUniform4f(loc_color, 0.2, 0.7, 0.1, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 26, 4) # G
-    glUniform4f(loc_color, 0.5, 0.3, 0.4, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 30, 4) # G
-    glUniform4f(loc_color, 0.5, 0.3, 0.4, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 34, 4) # G
-    glUniform4f(loc_color, 0.2, 0.7, 0.5, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 38, 4) # G
-    glUniform4f(loc_color, 0.5, 0.6, 0.2, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 42, 4) # G
-    glUniform4f(loc_color, 0.5, 0.2, 0.8, 1.0)
 
     glfw.swap_buffers(window)
 
