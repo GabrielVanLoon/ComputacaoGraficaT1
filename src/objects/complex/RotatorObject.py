@@ -71,7 +71,7 @@ class RotatorObject(GameObject):
         glDrawArrays(GL_TRIANGLE_FAN, RotatorObject.shader_offset + 4, 32)
 
         RotatorObject.shader_program.set4Float('u_color',[1.0, 1.0, 1.0, 1.0])
-        glDrawArrays(GL_LINES, RotatorObject.shader_offset + 36, 32)
+        glDrawArrays(GL_LINES, RotatorObject.shader_offset + 36, 2)
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:

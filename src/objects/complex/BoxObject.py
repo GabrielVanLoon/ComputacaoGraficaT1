@@ -83,8 +83,8 @@ class BoxObject(GameObject):
         BoxObject.shader_program.set4Float('u_color',[ 0.427, 0.443, 0.384, 1.0])
         glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+8, 5) # contorno diagonal interna
 
-        BoxObject.shader_program.set4Float('u_color',[ 0.0, 0.0, 0.0, 0.3])
-        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+13, 4) # sombra
+        # BoxObject.shader_program.set4Float('u_color',[ 0.0, 0.0, 0.0, 0.3])
+        # glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+13, 4) # sombra
         
         BoxObject.shader_program.set4Float('u_color',[ 0.427, 0.443, 0.384, 1.0])
         glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+17, 4) # detalhe

@@ -33,9 +33,10 @@ class GameController:
         self.__solid_objects = []
 
         self.__glfw_keys = {}
-        self.__glfw_observe_keys = []
+        self.__glfw_observe_keys = [glfw.KEY_R]
         self.__glfw_buttons = {}
 
+        self.__configure_vertexes_and_keys()
         self.__configure_objects()
         self.__configure_buffer()
 
@@ -59,15 +60,28 @@ class GameController:
             object["type"].shader_program.compile()
 
 
-    def __configure_objects(self) -> None:
+    def __configure_vertexes_and_keys(self) -> None:
         """
-        Start/Restart all objects used in the game
+        Configure vertex configurations and subscribed keys
         """
         for object in self.scheme:
             # Update Object offset and save vertices in program buffer
             object["type"].shader_offset = len(self.__vertices)
             self.__vertices += object["type"].get_vertices()
 
+            # Configure observed keys
+            if hasattr(object["type"], "subscribe_keys"):
+                self.__glfw_observe_keys += object["type"].subscribe_keys
+
+
+    def __configure_objects(self) -> None:
+        """
+        Start/Restart all objects used in the game
+        """
+        self.__objects = []
+        self.__solid_objects = []
+
+        for object in self.scheme:
             # Create all desired object items
             items = []
             for item in object["items"]:
@@ -79,13 +93,8 @@ class GameController:
                     if items[-1].object_hitbox != None:
                         self.__solid_objects.append(items[-1])
 
-
             # Append created items to objects
             self.__objects.append({"type": object["type"], "items": items })
-
-            # Configure observed keys
-            if hasattr(object["type"], "subscribe_keys"):
-                self.__glfw_observe_keys += object["type"].subscribe_keys
 
 
     def __configure_buffer(self) -> None:
@@ -138,6 +147,9 @@ class GameController:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
             glClearColor(1.0, 1.0, 1.0, 1.0)
 
+            # If key R pressed restart the game
+            if self.__glfw_keys.get(glfw.KEY_R, {"action": 0})["action"]:
+                self.__configure_objects()
 
             # Execute objects logics, if object is solid pass all solid objects to 
             # be used in the collision logics calculation
