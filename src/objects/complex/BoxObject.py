@@ -23,7 +23,6 @@ class BoxObject(GameObject):
         ( 1.0,  -1.0,  0.0),
     ]
     subscribe_keys = []
-    
 
     def get_vertices():
         """Geração dos vértices do Robo"""
