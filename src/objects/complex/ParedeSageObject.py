@@ -17,25 +17,25 @@ class ParedeSageObject(GameObject):
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
     shader_vertices = [ 
-        (-1.0, +0.2, 0.0),
-        (-1.0, -0.2, 0.0),
-        (-0.5, +0.2, 0.0),
-        (-0.5, -0.2, 0.0),
+        (-1.0, +1.0, 0.0),
+        (-1.0, -1.0, 0.0),
+        (-0.5, +1.0, 0.0),
+        (-0.5, -1.0, 0.0),
 
-        (-0.5, +0.2, 0.0),
-        (-0.5, -0.2, 0.0),
-        ( 0.0, +0.2, 0.0),
-        ( 0.0, -0.2, 0.0),
+        (-0.5, +1.0, 0.0),
+        (-0.5, -1.0, 0.0),
+        ( 0.0, +1.0, 0.0),
+        ( 0.0, -1.0, 0.0),
 
-        ( 0.0, +0.2, 0.0),
-        ( 0.0, -0.2, 0.0),
-        (+0.5, +0.2, 0.0),
-        (+0.5, -0.2, 0.0),
+        ( 0.0, +1.0, 0.0),
+        ( 0.0, -1.0, 0.0),
+        (+0.5, +1.0, 0.0),
+        (+0.5, -1.0, 0.0),
 
-        (+0.5, +0.2, 0.0),
-        (+0.5, -0.2, 0.0),
-        (+1.0, +0.2, 0.0),
-        (+1.0, -0.2, 0.0),
+        (+0.5, +1.0, 0.0),
+        (+0.5, -1.0, 0.0),
+        (+1.0, +1.0, 0.0),
+        (+1.0, -1.0, 0.0),
     ]
 
     subscribe_keys = []
@@ -54,12 +54,8 @@ class ParedeSageObject(GameObject):
         """Define a hitbox"""
 
         # Check if horizontal or vertical
-        if self.rotate == 0:
-            box_values = [ self.position[0]-self.size[0]/2, self.position[1]-0.125*self.size[1]/2, 
-                            self.size[0], self.size[1]*0.25 ]
-        else:
-            box_values = [ self.position[0]-0.125*self.size[0]/2, self.position[1]-self.size[1]/2, 
-                            self.size[0]*0.25, self.size[1] ]
+        box_values = [ self.position[0]-self.size[0]/2, self.position[1]-self.size[1]/2, 
+                    self.size[0], self.size[1] ]
 
         if self.object_hitbox == None:
             self.object_hitbox = Hitbox("box", box_values)

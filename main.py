@@ -34,16 +34,16 @@ def main():
                 { "position":(50,550), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
-        # {
-        #     "type": ContainerObject,
-        #     "items": [
-        #         { "position":(400,450), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
-        #     ] 
-        # },
+        {
+            "type": ContainerObject,
+            "items": [
+                { "position":(50,450), "size":(0.35*100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
         # {
         #     "type": ParedeSageObject,
         #     "items": [
-        #         { "position":(50,450), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+        #         { "position":(50,450), "size":(100*.4,300), "rotate":0, "props": { "hitbox": True } },
         #     ] 
         # },
         # {
