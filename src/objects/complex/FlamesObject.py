@@ -3,6 +3,8 @@ import numpy as np
 from OpenGL.GL import *
 import OpenGL.GL.shaders
 import glfw
+import math
+import random
 
 from src.shaders.Shader import Shader
 from src.shaders.BaseShader import vertex_code, fragment_code
@@ -19,11 +21,21 @@ class FlamesObject(GameObject):
     shader_offset   = 0
     shader_vertices = []
     subscribe_keys = []
-    
+    num_vertices = 64
 
     def get_vertices():
-        """Geração dos vértices do Robo"""
-        FlamesObject.shader_vertices += generate_random_circle_vertexes(22, radius=0.5)
+        pi = 3.14
+        counter = 0
+        radius = 1.0
+
+        vertices = np.zeros(FlamesObject.num_vertices, [("position", np.float32, 2)])
+
+        angle = 0.0
+        for counter in range(FlamesObject.num_vertices):
+            angle += 2*pi/FlamesObject.num_vertices 
+            x = math.cos(angle + math.sin(angle/20))*radius
+            y = math.sin(angle + random.random())*radius
+            FlamesObject.shader_vertices += [(x,y,0.0)]
         return FlamesObject.shader_vertices
 
 
@@ -52,7 +64,7 @@ class FlamesObject(GameObject):
         
         # Draw object steps
         FlamesObject.shader_program.set4Float('u_color',[1.0,0.0,0.3,1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, FlamesObject.shader_offset, 32)
+        glDrawArrays(GL_TRIANGLE_FAN, FlamesObject.shader_offset, FlamesObject.num_vertices)
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
