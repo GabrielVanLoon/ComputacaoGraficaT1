@@ -28,18 +28,18 @@ def main():
                 { "position":(50,50), "size":(70,70), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
-        {
-            "type": BoxObject,
-            "items": [
-                { "position":(50,550), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
-            ] 
-        },
-        {
-            "type": ContainerObject,
-            "items": [
-                { "position":(50,450), "size":(0.35*100,100), "rotate":90, "props": { "hitbox": True } },
-            ] 
-        },
+        # {
+        #     "type": BoxObject,
+        #     "items": [
+        #         { "position":(50,550), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+        #     ] 
+        # },
+        # {
+        #     "type": ContainerObject,
+        #     "items": [
+        #         { "position":(50,450), "size":(0.35*100,100), "rotate":90, "props": { "hitbox": True } },
+        #     ] 
+        # },
         # {
         #     "type": ParedeSageObject,
         #     "items": [
@@ -52,12 +52,12 @@ def main():
         #         { "position":(50,350), "size":(60,100), "rotate":0, "props": { "hitbox": True } },
         #     ] 
         # },
-        # {
-        #     "type": RotatorObject,
-        #     "items": [
-        #         { "position":(50,250), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
-        #     ] 
-        # },
+        {
+            "type": RotatorObject,
+            "items": [
+                { "position":(50,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
         # {
         #     "type": FlamesObject,
         #     "items": [

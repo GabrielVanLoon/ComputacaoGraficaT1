@@ -215,15 +215,35 @@ class RobotObject(GameObject):
                 break
 
 
+    def __event_trigger_logic(self, objects=[]) -> None:
+        """Wrapper event triggers logic"""
+        for item in objects:
+            if item == self:
+                continue
+            if type(item) == RotatorObject and self.object_hitbox.check_collision(item.object_hitbox):
+                rad = item.rotate*(np.pi/180.0)
+                self.__delta_direction[0] = np.cos(rad)
+                self.__delta_direction[1] = np.sin(rad)
+
+
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
         Atualiza as posicoes do quadrado com as teclas AWSD 
         """ 
+        
+        # Event trigger logic
+        self.__event_trigger_logic(objects)
 
         # Horizontal movement
         self.__collision_logic(0, objects)
             
         # Vertical movement
         self.__collision_logic(1, objects)
-            
+
+        # Update rotation from current direction vector
+        degX =  np.degrees(np.arccos(self.__delta_direction[0]))
+        degY =  np.degrees(np.arcsin(self.__delta_direction[1]))
+        self.rotate = (degX-90.0) if degY >= 0 else (-degX-90.0)
+
+
         self._configure_gl_variables()
