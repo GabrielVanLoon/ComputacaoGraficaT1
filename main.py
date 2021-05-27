@@ -42,7 +42,7 @@ def main():
         {
             "type": GateObject,
             "items": [
-                { "position":(50,350), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+                { "position":(50,350), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         {

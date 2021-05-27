@@ -124,6 +124,10 @@ class GameController:
         if self.__glfw_enable3D:
             glEnable(GL_DEPTH_TEST)
 
+        # Enable color transparency
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
         while not glfw.window_should_close(self.__glfw_window):
             glfw.poll_events() 
             

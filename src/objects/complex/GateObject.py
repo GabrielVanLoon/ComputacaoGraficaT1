@@ -17,10 +17,50 @@ class GateObject(GameObject):
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
     shader_vertices = [ 
-        (-0.4,   1.0,  0.0), 
-        (-0.4,  -1.0,  0.0), 
-        ( 0.4,   1.0,  0.0), 
-        ( 0.4,  -1.0,  0.0), 
+        (-0.8 , -0.3 , 0.0), #portao
+        (-0.8 , 1.0 , 0.0),
+        ( 0.8 , -0.3 , 0.0),
+        ( 0.8 , 1.0 , 0.0),
+
+        (-0.8 , 0.8 , 0.0), # risco
+        (-0.8 , 0.75 , 0.0),
+        ( 0.8 , 0.8 , 0.0),
+        ( 0.8 , 0.75 , 0.0),
+
+        (-0.8 , 0.55 , 0.0), # risco
+        (-0.8 , 0.5 , 0.0),
+        ( 0.8 , 0.55 , 0.0),
+        ( 0.8 , 0.5 , 0.0),
+
+        (-0.8 , 0.3 , 0.0), # risco
+        (-0.8 , 0.25 , 0.0),
+        ( 0.8 , 0.3 , 0.0),
+        ( 0.8 , 0.25 , 0.0),
+
+        (-0.8 , 0.0 , 0.0), # risco
+        (-0.8 , 0.05 , 0.0),
+        ( 0.8 , 0.0 , 0.0),
+        ( 0.8 , 0.05 , 0.0),
+
+        (-0.32 , 0.82 , 0.0), # detalhe azul
+        (-0.32 , 0.73 , 0.0),
+        ( 0.32 , 0.82 , 0.0),
+        ( 0.32 , 0.73 , 0.0),
+
+        (-0.32 , 0.58 , 0.0), # detalhe azul
+        (-0.32 , 0.47 , 0.0),
+        ( 0.32 , 0.58 , 0.0),
+        ( 0.32 , 0.47 , 0.0),
+
+        (-0.32 , 0.33 , 0.0), # detalhe azul
+        (-0.32 , 0.22 , 0.0),
+        ( 0.32 , 0.33 , 0.0),
+        ( 0.32 , 0.22 , 0.0),
+
+        (-0.32 , -0.03 , 0.0), # detalhe azul
+        (-0.32 , 0.08 , 0.0),
+        ( 0.32 , -0.03 , 0.0),
+        ( 0.32 , 0.08 , 0.0),
     ]
 
     subscribe_keys = []
@@ -61,7 +101,20 @@ class GateObject(GameObject):
         GateObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
         # Draw object steps
-        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset, 4)
+        GateObject.shader_program.set4Float('u_color',[0.69, 0.572, 0.423, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+0, 4) # portao
+
+        GateObject.shader_program.set4Float('u_color',[0.0, 0.0, 0.0, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+4, 4) # risco
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+8, 4) # risco
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+12, 4) # risco
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+16, 4) # risco
+
+        GateObject.shader_program.set4Float('u_color',[0.737, 0.925, 0.863, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+20, 4) # detalhe azul
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+24, 4) # detalhe azul
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+28, 4) # detalhe azul
+        glDrawArrays(GL_TRIANGLE_STRIP, GateObject.shader_offset+32, 4) # detalhe azul
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:

@@ -135,7 +135,7 @@ class RobotObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__delta_translate = 0.2  # Moves 0.1 px each translation iteration
+        self.__delta_translate = 0.1  # Moves 0.1 px each translation iteration
         self.__delta_direction = np.array([0.0, 1.0], dtype=np.float) # Initial direction up
     
 
@@ -162,29 +162,29 @@ class RobotObject(GameObject):
         
         # Draw steps
         RobotObject.shader_program.set4Float('u_color',[0.678, 0.333, 0.118, 1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 7) # perfil
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+0, 7) # perfil
 
         RobotObject.shader_program.set4Float('u_color',[ 0.153, 0.188, 0.188, 1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, 7, 6) # cima
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+7, 6) # cima
 
         RobotObject.shader_program.set4Float('u_color',[ 0.290, 0.498, 0.447, 1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, 13, 5) # azul direita
-        glDrawArrays(GL_TRIANGLE_FAN, 18, 5) # azul esquerda
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+13, 5) # azul direita
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+18, 5) # azul esquerda
 
         RobotObject.shader_program.set4Float('u_color',[ 0.972, 0.898, 0.294, 1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, 23, 6) # contorno smile preto
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+23, 6) # contorno smile preto
 
         RobotObject.shader_program.set4Float('u_color',[ 0.647, 0.247, 0.117, 1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, 29, RobotObject.num_vertices) #carinha
-        glDrawArrays(GL_TRIANGLE_FAN, 29 + RobotObject.num_vertices, RobotObject.num_vertices)
-        glDrawArrays(GL_TRIANGLE_STRIP, 29 + 2 * RobotObject.num_vertices, 4)
-        glDrawArrays(GL_TRIANGLE_STRIP, 33 + 2 * RobotObject.num_vertices, 4)
-        glDrawArrays(GL_TRIANGLE_STRIP, 37 + 2 * RobotObject.num_vertices, 4)
-        glDrawArrays(GL_TRIANGLE_STRIP, 41 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+29, RobotObject.num_vertices) #carinha
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+29 + RobotObject.num_vertices, RobotObject.num_vertices)
+        glDrawArrays(GL_TRIANGLE_STRIP, RobotObject.shader_offset+29 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_STRIP, RobotObject.shader_offset+33 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_STRIP, RobotObject.shader_offset+37 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_STRIP, RobotObject.shader_offset+41 + 2 * RobotObject.num_vertices, 4)
 
         RobotObject.shader_program.set4Float('u_color',[ 0.212, 0.231, 0.227, 1.0])
-        glDrawArrays(GL_TRIANGLE_FAN, 45 + 2 * RobotObject.num_vertices, RobotObject.num_vertices)
-        glDrawArrays(GL_TRIANGLE_FAN, 45 + 3 * RobotObject.num_vertices, RobotObject.num_vertices)
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+45 + 2 * RobotObject.num_vertices, RobotObject.num_vertices)
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+45 + 3 * RobotObject.num_vertices, RobotObject.num_vertices)
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:

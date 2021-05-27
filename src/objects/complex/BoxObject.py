@@ -17,16 +17,37 @@ class BoxObject(GameObject):
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
     shader_vertices = [ 
-        (-1.0,   1.0,  0.0),
-        (-1.0,  -1.0,  0.0),
-        ( 1.0,   1.0,  0.0),
-        ( 1.0,  -1.0,  0.0),
+        ( -1.0 , -1.0 , 0.0), # caixa
+        ( 1.0 , -1.0 , 0.0),
+        ( -1.0 , 1.0 , 0.0),
+        ( 1.0 , 1.0 , 0.0),
+
+        ( -0.9 , -0.7 , 0.0), # caixa contorno interno
+        ( -0.9 , 0.9 , 0.0),
+        ( 0.9 , -0.7 , 0.0),
+        ( 0.9 , 0.9 , 0.0),
+
+        ( -0.9 , 0.8 , 0.0), # caixa diagonal interna
+        ( 0.8 , -0.7 , 0.0),
+        ( -0.9 , 0.9 , 0.0),
+        ( 0.9 , -0.7 , 0.0),
+        ( 0.9 , 0.9 , 0.0),
+
+        ( 1.0 , 1.0 , 0.0), # caixa sombra
+        ( 1.0 , -1.0 , 0.0),
+        ( 1.2 , 1.0 , 0.0),
+        ( 1.2 , -1.0 , 0.0),
+
+        ( -0.9 , -0.95 , 0.0), # caixa detalhe
+        ( -0.9 , -0.75 , 0.0),
+        ( 0.9 , -0.95 , 0.0),
+        ( 0.9 , -0.75 , 0.0),
     ]
     subscribe_keys = []
     
 
     def get_vertices():
-        """Geração dos vértices do Robo"""
+        """Geração dos vértices da Caixa"""
         return BoxObject.shader_vertices
 
 
@@ -54,7 +75,20 @@ class BoxObject(GameObject):
         BoxObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
         # Draw object steps
-        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset, 4)
+        BoxObject.shader_program.set4Float('u_color',[ 0.478, 0.47, 0.419, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+0, 4) # perfil
+
+        BoxObject.shader_program.set4Float('u_color',[ 0.556, 0.933, 0.772, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+4, 4) # contorno interno
+
+        BoxObject.shader_program.set4Float('u_color',[ 0.427, 0.443, 0.384, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+8, 5) # contorno diagonal interna
+
+        BoxObject.shader_program.set4Float('u_color',[ 0.0, 0.0, 0.0, 0.3])
+        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+13, 4) # sombra
+        
+        BoxObject.shader_program.set4Float('u_color',[ 0.427, 0.443, 0.384, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, BoxObject.shader_offset+17, 4) # detalhe
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
