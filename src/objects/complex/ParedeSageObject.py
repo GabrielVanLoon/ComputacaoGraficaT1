@@ -76,8 +76,8 @@ class ParedeSageObject(GameObject):
         ParedeSageObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
         # Draw object steps
-        ContainerObject.shader_program.set4Float('u_color',[0.729, 0.596, 0.592, 1.0])
-        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 0, 4) # container
+        ParedeSageObject.shader_program.set4Float('u_color',[0.729, 0.596, 0.592, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 0, 4) # container
 
         ParedeSageObject.shader_program.set4Float('u_color',[0.314, 0.659, 0.482, 1.0])
         glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 0, 4) # esquerda

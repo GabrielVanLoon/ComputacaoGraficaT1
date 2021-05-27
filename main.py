@@ -12,6 +12,7 @@ from src.objects.examples.BoucingBallObject import BoucingBallObject
 from src.objects.complex.RobotObject import RobotObject
 from src.objects.complex.BoxObject import BoxObject
 from src.objects.complex.ContainerObject import ContainerObject
+from src.objects.complex.ParedeSageObject import ParedeSageObject
 from src.objects.complex.GateObject import GateObject
 from src.objects.complex.RotatorObject import RotatorObject
 from src.objects.complex.FlamesObject import FlamesObject
@@ -35,6 +36,12 @@ def main():
         },
         {
             "type": ContainerObject,
+            "items": [
+                { "position":(400,450), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": ParedeSageObject,
             "items": [
                 { "position":(50,450), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
             ] 
