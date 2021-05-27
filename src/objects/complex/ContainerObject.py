@@ -17,8 +17,8 @@ class ContainerObject(GameObject):
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
     shader_vertices = [
-        (-0.875, +0.25, 0.0),
-        (-0.875, -0.25, 0.0),
+        (-1.0, +0.25, 0.0),
+        (-1.0, -0.25, 0.0),
         (+1.0, +0.25, 0.0),
         (+1.0, -0.25, 0.0),
 

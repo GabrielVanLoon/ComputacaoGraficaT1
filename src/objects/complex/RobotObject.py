@@ -8,9 +8,19 @@ import glfw
 from src.shaders.Shader import Shader
 from src.shaders.BaseShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
-from src.helpers.vertex import generate_circle_vertexes
 from src.helpers.collisions import hitbox_window_collider
 from src.colliders.Hitbox import Hitbox
+
+# Types used in Game Collision Logic
+from src.objects.complex.BoxObject import BoxObject
+from src.objects.complex.ContainerObject import ContainerObject
+from src.objects.complex.ParedeSageObject import ParedeSageObject
+from src.objects.complex.GateObject import GateObject
+
+# Types used to trigger events on collide
+from src.objects.complex.RotatorObject import RotatorObject
+from src.objects.complex.FlamesObject import FlamesObject
+
 
 class RobotObject(GameObject):
     """
@@ -141,8 +151,8 @@ class RobotObject(GameObject):
 
     def configure_hitbox(self) -> None:
         """Define a box type Hitbox"""
-        box_values = [ self.position[0]-self.size[0]/2, self.position[1]-self.size[1]/2, 
-                        self.size[0], self.size[1] ]
+        box_values = [ self.position[0]-(0.857/2)*self.size[0]/2, self.position[1]-(0.857/2)*self.size[1]/2, 
+                        0.857*self.size[0], 0.857*self.size[1] ]
 
         if self.object_hitbox == None:
             self.object_hitbox = Hitbox("box", box_values)
@@ -187,41 +197,33 @@ class RobotObject(GameObject):
         glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset+45 + 3 * RobotObject.num_vertices, RobotObject.num_vertices)
 
 
+    def __collision_logic(self, move,  objects=[]) -> None:
+        """Wrapper collision Logic"""
+        collision = False
+        last_position = self.position[move]
+
+        self.position[move] += self.__delta_translate * self.__delta_direction[move]
+        self.configure_hitbox()
+
+        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
+        for item in objects: 
+            if item != self and type(item) in [BoxObject, ContainerObject, ParedeSageObject, GateObject]:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                self.position[move] = last_position
+                self.__delta_direction[move] *= -1.0
+                break
+
+
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
         Atualiza as posicoes do quadrado com as teclas AWSD 
         """ 
 
         # Horizontal movement
-        collision = False
-        last_position = self.position[0]
-
-        self.position[0] += self.__delta_translate * self.__delta_direction[0]
-        self.configure_hitbox()
-
-        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
-        for item in objects: 
-            if item != self:
-                collision |= self.object_hitbox.check_collision(item.object_hitbox)
-            if collision:
-                self.position[0] = last_position
-                self.__delta_direction[0] *= -1.0
-                break
+        self.__collision_logic(0, objects)
             
         # Vertical movement
-        collision = False
-        last_position = self.position[1]
-
-        self.position[1] += self.__delta_translate * self.__delta_direction[1]
-        self.configure_hitbox()
-
-        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
-        for item in objects: 
-            if item != self:
-                collision |= self.object_hitbox.check_collision(item.object_hitbox)
-            if collision:
-                self.position[1] = last_position
-                self.__delta_direction[1] *= -1.0
-                break
+        self.__collision_logic(1, objects)
             
         self._configure_gl_variables()

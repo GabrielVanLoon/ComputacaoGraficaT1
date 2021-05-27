@@ -80,11 +80,11 @@ class GateObject(GameObject):
 
         # Check if horizontal or vertical
         if self.rotate == 0:
-            box_values = [ self.position[0]-0.4*self.size[0]/2, self.position[1]-self.size[1]/2, 
-                            self.size[0]*0.4, self.size[1] ]
+            box_values = [ self.position[0]-0.8*self.size[0]/2, self.position[1], 
+                            self.size[0]*0.8, 0.5*self.size[1] ]
         else:
-            box_values = [ self.position[0]-self.size[0]/2, self.position[1]-0.4*self.size[1]/2, 
-                            self.size[0], self.size[1]*0.4 ]
+            box_values = [ self.position[0], self.position[1]-0.8*self.size[1]/2, 
+                            0.5*self.size[0], self.size[1]*0.8 ]
 
         if self.object_hitbox == None:
             self.object_hitbox = Hitbox("box", box_values)
