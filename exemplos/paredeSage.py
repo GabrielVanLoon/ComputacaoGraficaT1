@@ -178,18 +178,11 @@ while not glfw.window_should_close(window):
     loc = glGetUniformLocation(program, "mat_transformation")
     glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
     
+    glUniform4f(loc_color, 0.314, 0.659, 0.482, 1.0)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4) # esquerda
-    glUniform4f(loc_color, 0.4, 0.6, 0.2, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 4, 4) # esquerda centro
-    glUniform4f(loc_color, 0.4, 0.6, 0.2, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 8, 4) # direita centro
-    glUniform4f(loc_color, 0.4, 0.6, 0.2, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 12, 4) # direita
-    glUniform4f(loc_color, 0.4, 0.6, 0.2, 1.0)
-
     glfw.swap_buffers(window)
 
 glfw.terminate()
