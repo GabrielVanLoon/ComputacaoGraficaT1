@@ -22,10 +22,113 @@ class RobotObject(GameObject):
     shader_offset   = 0
     shader_vertices = []
     subscribe_keys  = []
+
+    num_vertices = 10
     
     def get_vertices():
         """Geração dos vértices do Robo"""
-        RobotObject.shader_vertices = generate_circle_vertexes(N=32, center=(0,0), radius=1.0)
+        RobotObject.shader_vertices = [
+            ( 0.428 , 0.857 , 0.0), # laranja
+            ( 1.0 , 0.428 , 0.0),
+            ( 0.857 , -0.286 , 0.0),
+            ( 0.0 , -0.857 , 0.0),
+            ( -0.857 , -0.286 , 0.0),
+            ( -1.0 , 0.428 , 0.0),
+            ( -0.428 , 0.857 , 0.0),    
+
+            ( 0.428 , 0.857 , 0.0), # preto
+            ( 0.642 , 0.714 , 0.0),
+            ( 0.286 , 0.214 , 0.0),
+            ( -0.286 , 0.214 , 0.0),
+            ( -0.642 , 0.714 , 0.0),
+            ( -0.428 , 0.857 , 0.0),
+
+            ( 0.643 , 0.714 , 0.0), # azul direita
+            ( 1.0 , 0.428 , 0.0),
+            ( 0.928 , 0.0 , 0.0),
+            ( 0.5 , 0.0 , 0.0),
+            ( 0.285 , 0.214 , 0.0),
+
+            ( -0.642 , 0.714 , 0.0), # azul esquerda
+            ( -1.0 , 0.428 , 0.0),
+            ( -0.928 , 0.0 , 0.0),
+            ( -0.5 , 0.0 , 0.0),
+            ( -0.285 , 0.214 , 0.0),
+
+            ( 0.285 , 0.214 , 0.0), # contorno smile
+            ( 0.5 , 0.0 , 0.0),
+            ( 0.214 , -0.571 , 0.0),
+            ( -0.214 , -0.571 , 0.0),
+            ( -0.5 , 0.0 , 0.0),
+            ( -0.285 , 0.214 , 0.0),
+        ]
+
+        counter = 29
+        radius = 0.0714
+        posx = 0.286
+        posy = -0.071
+        angle = 0.0
+        for counter in range(29, 29 + RobotObject.num_vertices):
+            angle += 2*math.pi/RobotObject.num_vertices
+            x = math.cos(angle)*radius + posx   
+            y = math.sin(angle)*radius + posy
+            RobotObject.shader_vertices += [(x,y,0.0)]
+
+        counter = 39
+        radius = 0.0714
+        posx = -0.285
+        posy = -0.071
+        angle = 0.0
+        for counter in range(39, 39 + RobotObject.num_vertices):
+            angle += 2*math.pi/RobotObject.num_vertices
+            x = math.cos(angle)*radius + posx   
+            y = math.sin(angle)*radius + posy
+            RobotObject.shader_vertices += [(x,y,0.0)]
+
+        RobotObject.shader_vertices += [
+            ( -0.142 , -0.157 , 0.0), # Smiles *W*
+            ( -0.128 , -0.142 , 0.0),
+            ( -0.043 , -0.257 , 0.0),
+            ( -0.036 , -0.236 , 0.0),
+
+            ( -0.043 , -0.257 , 0.0),
+            ( -0.057 , -0.242 , 0.0),
+            ( 0.0 , -0.2 , 0.0),
+            ( 0.0 , -0.185 , 0.0),
+
+            ( 0.043 , -0.257 , 0.0),
+            ( 0.057 , -0.242 , 0.0),
+            ( 0.0 , -0.2 , 0.0),
+            ( 0.0 , -0.185 , 0.0),
+
+            ( 0.143 , -0.157 , 0.0),
+            ( 0.128 , -0.142 , 0.0),
+            ( 0.043 , -0.257 , 0.0),
+            ( 0.036 , -0.236 , 0.0),
+        ]
+
+        counter = 65
+        radius = 0.857
+        posx = -0.786
+        posy = 0.0
+        angle = math.pi/2
+        for counter in range(65, 65 + RobotObject.num_vertices):
+            angle += math.pi/RobotObject.num_vertices
+            x = math.cos(angle)*radius*0.4 + posx   
+            y = math.sin(angle)*radius + posy
+            RobotObject.shader_vertices += [(x,y,0.0)]
+
+        counter = 75
+        radius = 0.857
+        posx = +0.785
+        posy = 0.0
+        angle = math.pi/2
+        for counter in range(75, 75 + RobotObject.num_vertices):
+            angle += math.pi/RobotObject.num_vertices
+            x = -1*math.cos(angle)*radius*0.4 + posx
+            y = math.sin(angle)*radius + posy
+            RobotObject.shader_vertices += [(x,y,0.0)]
+
         return RobotObject.shader_vertices
 
 
@@ -57,8 +160,31 @@ class RobotObject(GameObject):
         # Send final matrix to the GPU unit
         RobotObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
-        # Draw object steps
-        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset, 32)
+        # Draw steps
+        RobotObject.shader_program.set4Float('u_color',[0.678, 0.333, 0.118, 1.0])
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 7) # perfil
+
+        RobotObject.shader_program.set4Float('u_color',[ 0.153, 0.188, 0.188, 1.0])
+        glDrawArrays(GL_TRIANGLE_FAN, 7, 6) # cima
+
+        RobotObject.shader_program.set4Float('u_color',[ 0.290, 0.498, 0.447, 1.0])
+        glDrawArrays(GL_TRIANGLE_FAN, 13, 5) # azul direita
+        glDrawArrays(GL_TRIANGLE_FAN, 18, 5) # azul esquerda
+
+        RobotObject.shader_program.set4Float('u_color',[ 0.972, 0.898, 0.294, 1.0])
+        glDrawArrays(GL_TRIANGLE_FAN, 23, 6) # contorno smile preto
+
+        RobotObject.shader_program.set4Float('u_color',[ 0.647, 0.247, 0.117, 1.0])
+        glDrawArrays(GL_TRIANGLE_FAN, 29, RobotObject.num_vertices) #carinha
+        glDrawArrays(GL_TRIANGLE_FAN, 29 + RobotObject.num_vertices, RobotObject.num_vertices)
+        glDrawArrays(GL_TRIANGLE_STRIP, 29 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_STRIP, 33 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_STRIP, 37 + 2 * RobotObject.num_vertices, 4)
+        glDrawArrays(GL_TRIANGLE_STRIP, 41 + 2 * RobotObject.num_vertices, 4)
+
+        RobotObject.shader_program.set4Float('u_color',[ 0.212, 0.231, 0.227, 1.0])
+        glDrawArrays(GL_TRIANGLE_FAN, 45 + 2 * RobotObject.num_vertices, RobotObject.num_vertices)
+        glDrawArrays(GL_TRIANGLE_FAN, 45 + 3 * RobotObject.num_vertices, RobotObject.num_vertices)
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
