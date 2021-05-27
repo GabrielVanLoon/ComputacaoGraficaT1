@@ -151,7 +151,7 @@ class RobotObject(GameObject):
 
     def configure_hitbox(self) -> None:
         """Define a box type Hitbox"""
-        box_values = [ self.position[0]-(0.857/2)*self.size[0]/2, self.position[1]-(0.857/2)*self.size[1]/2, 
+        box_values = [ self.position[0]-(0.857)*self.size[0]/2, self.position[1]-(0.857)*self.size[1]/2, 
                         0.857*self.size[0], 0.857*self.size[1] ]
 
         if self.object_hitbox == None:
