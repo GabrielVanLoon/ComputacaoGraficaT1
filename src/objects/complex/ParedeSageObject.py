@@ -8,6 +8,7 @@ from src.shaders.Shader import Shader
 from src.shaders.BaseShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
 from src.colliders.Hitbox import Hitbox
+from src.helpers.collisions import hitbox_window_collider
 
 class ParedeSageObject(GameObject):
     """
@@ -49,6 +50,8 @@ class ParedeSageObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
+        self.__move_direction  = 0 if self.size[0] >= self.size[1] else 1
+        self.__delta_translate = 0.1  # Move 1 px each active iteration
 
     def configure_hitbox(self) -> None:
         """Define a hitbox"""
@@ -85,6 +88,30 @@ class ParedeSageObject(GameObject):
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
         Parede se move em seu eixo de maio comprimento, precisando verificar
-        a rotação atual para decidir a direção a ser tomada.
+        também se não vai sobrepor nenhum outro objeto
         """
-        return 
+
+        # Salvando estado anterior
+        collision = False
+        last_position = self.position[self.__move_direction]
+        
+        # Realiza o movimento 
+        self.position[self.__move_direction] += buttons.get(glfw.MOUSE_BUTTON_LEFT, {"action": 0})["action"] * self.__delta_translate
+        self.position[self.__move_direction] -= buttons.get(glfw.MOUSE_BUTTON_RIGHT, {"action": 0})["action"] * self.__delta_translate
+        self.configure_hitbox()
+
+        # Verificando se o movimento é válido
+        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)
+        for item in objects: 
+            if collision:
+                break
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+        
+        # Se colidiu cancela o movimento e retorna estado anterior
+        if collision:
+            self.position[self.__move_direction] = last_position
+            self.configure_hitbox()
+
+        self._configure_gl_variables()
+        
