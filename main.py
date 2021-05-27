@@ -2,27 +2,75 @@
 
 from src.GameController import GameController
 from src.objects.geometrics.SquareObject import SquareObject
+
 from src.objects.geometrics.TriangleObject import TriangleObject 
 from src.objects.geometrics.RectangleObject import RectangleObject 
+
 from src.objects.examples.RunningSquareObject import RunningSquareObject
 from src.objects.examples.BoucingBallObject import BoucingBallObject
+
+from src.objects.complex.RobotObject import RobotObject
+from src.objects.complex.BoxObject import BoxObject
+from src.objects.complex.ContainerObject import ContainerObject
+from src.objects.complex.GateObject import GateObject
+from src.objects.complex.RotatorObject import RotatorObject
+from src.objects.complex.FlamesObject import FlamesObject
+
 
 
 def main():
 
     scene_scheme = [
         {
-            "type": RunningSquareObject,
+            "type": RobotObject,
             "items": [
-                { "position":(500,500), "size":(200,200), "rotate":0, "props": { "hitbox": True } },
+                { "position":(50,50), "size":(70,70), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         {
-            "type": BoucingBallObject,
+            "type": BoxObject,
             "items": [
-                { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True }},
+                { "position":(50,550), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
+        {
+            "type": ContainerObject,
+            "items": [
+                { "position":(50,450), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": GateObject,
+            "items": [
+                { "position":(50,350), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": RotatorObject,
+            "items": [
+                { "position":(50,250), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": FlamesObject,
+            "items": [
+                { "position":(50,150), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
+
+
+        # {
+        #     "type": RunningSquareObject,
+        #     "items": [
+        #         { "position":(500,500), "size":(200,200), "rotate":0, "props": { "hitbox": True } },
+        #     ] 
+        # },
+        # {
+        #     "type": BoucingBallObject,
+        #     "items": [
+        #         { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True }},
+        #     ] 
+        # },
         # {
         #     "type": SquareObject,
         #     "items": [

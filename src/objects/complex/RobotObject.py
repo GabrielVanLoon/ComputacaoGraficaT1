@@ -1,28 +1,51 @@
 #!/usr/bin/env python3
+import math 
 import numpy as np
 from OpenGL.GL import *
 import OpenGL.GL.shaders
+import glfw
 
 from src.shaders.Shader import Shader
 from src.shaders.BaseShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
+from src.helpers.vertex import generate_circle_vertexes
+from src.helpers.collisions import hitbox_window_collider
+from src.colliders.Hitbox import Hitbox
 
 class RobotObject(GameObject):
     """
-    Implementa a forma do Robo utilizado como personagem no jogo
+    Implementa o Robô que se move constantemente em busca de alcançar
+    o objetivo da fase. 
     """
 
     shader_program  = Shader(vertex_code, fragment_code)
-    shader_offset = 0
-    shader_vertices = [ 
-        (-1.0,   1.0,  0.0),
-        (-1.0,  -1.0,  0.0),
-        ( 1.0,   1.0,  0.0),
-        ( 1.0,  -1.0,  0.0),
-    ]
+    shader_offset   = 0
+    shader_vertices = []
+    subscribe_keys  = []
+    
+    def get_vertices():
+        """Geração dos vértices do Robo"""
+        RobotObject.shader_vertices = generate_circle_vertexes(N=32, center=(0,0), radius=1.0)
+        return RobotObject.shader_vertices
+
 
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
+
+        self.__delta_translate = 0.2  # Moves 0.1 px each translation iteration
+        self.__delta_direction = np.array([0.0, 1.0], dtype=np.float) # Initial direction up
+    
+
+    def configure_hitbox(self) -> None:
+        """Define a box type Hitbox"""
+        box_values = [ self.position[0]-self.size[0]/2, self.position[1]-self.size[1]/2, 
+                        self.size[0], self.size[1] ]
+
+        if self.object_hitbox == None:
+            self.object_hitbox = Hitbox("box", box_values)
+        else: 
+            self.object_hitbox.update_values(box_values)
+
 
     def draw(self):
         """
@@ -35,4 +58,44 @@ class RobotObject(GameObject):
         RobotObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
         # Draw object steps
-        glDrawArrays(GL_TRIANGLE_STRIP, RobotObject.shader_offset, 4)
+        glDrawArrays(GL_TRIANGLE_FAN, RobotObject.shader_offset, 32)
+
+
+    def logic(self, keys={}, buttons={}, objects=[]) -> None:
+        """
+        Atualiza as posicoes do quadrado com as teclas AWSD 
+        """ 
+
+        # Horizontal movement
+        collision = False
+        last_position = self.position[0]
+
+        self.position[0] += self.__delta_translate * self.__delta_direction[0]
+        self.configure_hitbox()
+
+        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
+        for item in objects: 
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                self.position[0] = last_position
+                self.__delta_direction[0] *= -1.0
+                break
+            
+        # Vertical movement
+        collision = False
+        last_position = self.position[1]
+
+        self.position[1] += self.__delta_translate * self.__delta_direction[1]
+        self.configure_hitbox()
+
+        collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)        
+        for item in objects: 
+            if item != self:
+                collision |= self.object_hitbox.check_collision(item.object_hitbox)
+            if collision:
+                self.position[1] = last_position
+                self.__delta_direction[1] *= -1.0
+                break
+            
+        self._configure_gl_variables()

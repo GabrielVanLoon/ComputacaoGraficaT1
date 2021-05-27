@@ -96,6 +96,13 @@ class Shader:
         glUniform3f(self.__uniforms[name], value[0], value[1], value[2])
 
 
+    def set4Float(self, name, value) -> None:
+        """Uniform Helper"""
+        if name not in self.__uniforms.keys():
+            self.__uniforms[name] = glGetUniformLocation(self.__program, name)
+        glUniform4f(self.__uniforms[name], value[0], value[1], value[2], value[3])
+
+
     def set4fMatrix(self, name, value) -> None:
         """Uniform Helper"""
         if name not in self.__uniforms.keys():
