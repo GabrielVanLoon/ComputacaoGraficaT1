@@ -45,8 +45,8 @@ class FlamesObject(GameObject):
 
     def configure_hitbox(self) -> None:
         """Define a hitbox"""
-        box_values = [ self.position[0]-0.5*self.size[0]/2, self.position[1]-0.5*self.size[1]/2, 
-                        0.5*self.size[0], 0.5*self.size[1] ]
+        box_values = [ self.position[0]-0.2*self.size[0]/2, self.position[1]-0.2*self.size[1]/2, 
+                        0.2*self.size[0], 0.2*self.size[1] ]
 
         if self.object_hitbox == None:
             self.object_hitbox = Hitbox("box", box_values)

@@ -52,7 +52,7 @@ class GameObject:
             Representa o tamanho atual da tela (necessário para realizar algumas conversões)
         """
         self.position = [position[0], position[1]]                   
-        self.size = size
+        self.size = np.array([size[0], size[1]], dtype=np.float)
         self.rotate = rotate
         self.window_resolution = window_resolution
 

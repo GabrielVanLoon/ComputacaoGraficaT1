@@ -147,6 +147,7 @@ class RobotObject(GameObject):
 
         self.__delta_translate = 0.1  # Moves 0.1 px each translation iteration
         self.__delta_direction = np.array([0.0, 1.0], dtype=np.float) # Initial direction up
+        self.__dead = False
     
 
     def configure_hitbox(self) -> None:
@@ -224,13 +225,22 @@ class RobotObject(GameObject):
                 rad = item.rotate*(np.pi/180.0)
                 self.__delta_direction[0] = np.cos(rad)
                 self.__delta_direction[1] = np.sin(rad)
-
+            elif type(item) == FlamesObject and self.object_hitbox.check_collision(item.object_hitbox):
+                self.__dead = True
+                break
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
         """
-        Atualiza as posicoes do quadrado com as teclas AWSD 
+        Implementa a lógica de colisões do robo
         """ 
         
+        if self.__dead:
+            self.rotate  += 0.2
+            self.size[0] -= 0.03 if self.size[0] > 0 else 0.0
+            self.size[1] -= 0.03 if self.size[1] > 0 else 0.0
+            self._configure_gl_variables()
+            return
+
         # Event trigger logic
         self.__event_trigger_logic(objects)
 
@@ -244,6 +254,5 @@ class RobotObject(GameObject):
         degX =  np.degrees(np.arccos(self.__delta_direction[0]))
         degY =  np.degrees(np.arcsin(self.__delta_direction[1]))
         self.rotate = (degX-90.0) if degY >= 0 else (-degX-90.0)
-
 
         self._configure_gl_variables()

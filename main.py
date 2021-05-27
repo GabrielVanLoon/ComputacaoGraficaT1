@@ -25,7 +25,7 @@ def main():
         {
             "type": RobotObject,
             "items": [
-                { "position":(50,50), "size":(70,70), "rotate":0, "props": { "hitbox": True } },
+                { "position":(100,50), "size":(70,70), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         # {
@@ -52,20 +52,18 @@ def main():
         #         { "position":(50,350), "size":(60,100), "rotate":0, "props": { "hitbox": True } },
         #     ] 
         # },
-        {
-            "type": RotatorObject,
-            "items": [
-                { "position":(50,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
-            ] 
-        },
         # {
-        #     "type": FlamesObject,
+        #     "type": RotatorObject,
         #     "items": [
-        #         { "position":(50,150), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+        #         { "position":(50,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
         #     ] 
         # },
-
-
+        {
+            "type": FlamesObject,
+            "items": [
+                { "position":(50,350), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+            ] 
+        },
         # {
         #     "type": RunningSquareObject,
         #     "items": [
