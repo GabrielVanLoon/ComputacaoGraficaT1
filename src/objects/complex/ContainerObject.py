@@ -16,13 +16,64 @@ class ContainerObject(GameObject):
 
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
-    shader_vertices = [ 
-        (-1.0,   0.25,  0.0), 
-        (-1.0,  -0.25,  0.0), 
-        ( 1.0,   0.25,  0.0), 
-        ( 1.0,  -0.25,  0.0), 
-    ]
+    shader_vertices = [
+        (-0.875, +0.25, 0.0),
+        (-0.875, -0.25, 0.0),
+        (+1.0, +0.25, 0.0),
+        (+1.0, -0.25, 0.0),
 
+        (-0.75, +0.225, 0.0),
+        (-0.75, -0.225, 0.0),
+        (-0.625, +0.225, 0.0),
+        (-0.625, -0.225, 0.0),
+
+        (-0.375, -0.225, 0.0),
+        (-0.25, -0.225, 0.0),
+        (-0.625,  0.0, 0.0),
+        (-0.5,  0.0, 0.0),
+        (-0.375, +0.225, 0.0),
+        (-0.25, +0.225, 0.0),
+
+        (-0.125, +0.225, 0.0),
+        ( 0.0, +0.225, 0.0),
+        (-0.125, -0.225, 0.0),
+        ( 0.0, -0.225, 0.0),
+
+        ( 0.0, +0.225, 0.0),
+        ( 0.0, +0.0, 0.0),
+        (+0.125, -0.0, 0.0),
+        (+0.125, -0.225, 0.0),
+
+        (+0.125, -0.225, 0.0),
+        (+0.25, -0.225, 0.0),
+        (+0.125, +0.225, 0.0),
+        (+0.25, +0.225, 0.0),
+
+        (+0.875, +0.225, 0.0),
+        (+0.375, +0.225, 0.0),
+        (+0.875, +0.125, 0.0),
+        (+0.375, +0.125, 0.0),
+
+        (+0.375, +0.225, 0.0),
+        (+0.5, +0.225, 0.0),
+        (+0.375, -0.225, 0.0),
+        (+0.5, -0.225, 0.0),
+
+        (+0.375, -0.225, 0.0),
+        (+0.375, -0.125, 0.0),
+        (+0.875, -0.225, 0.0),
+        (+0.875, -0.125, 0.0),
+
+        (+0.875, -0.225, 0.0),
+        (+0.75, -0.225, 0.0),
+        (+0.875, +0.0375, 0.0),
+        (+0.75, +0.0375, 0.0),
+
+        (+0.875, +0.0375, 0.0),
+        (+0.875, -0.0625, 0.0),
+        (+0.625, +0.0375, 0.0),
+        (+0.625, -0.0625, 0.0)
+    ]
     subscribe_keys = []
     
 
@@ -61,7 +112,20 @@ class ContainerObject(GameObject):
         ContainerObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
         # Draw object steps
-        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset, 4)
+        ContainerObject.shader_program.set4Float('u_color',[0.729, 0.596, 0.592, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 0, 4) # container
+
+        ContainerObject.shader_program.set4Float('u_color',[0.882, 0.835, 0.921, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 4, 4) # K
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 8, 6) # K
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 14, 4) # N
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 18, 4) # N
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 22, 4) # N
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 26, 4) # G
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 30, 4) # G
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 34, 4) # G
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 38, 4) # G
+        glDrawArrays(GL_TRIANGLE_STRIP, ContainerObject.shader_offset + 42, 4) # G
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:

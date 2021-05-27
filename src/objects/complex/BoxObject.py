@@ -44,7 +44,6 @@ class BoxObject(GameObject):
         ( 0.9 , -0.75 , 0.0),
     ]
     subscribe_keys = []
-    
 
     def get_vertices():
         """Geração dos vértices da Caixa"""
