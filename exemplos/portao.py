@@ -60,7 +60,7 @@ if not glGetProgramiv(program, GL_LINK_STATUS):
 glUseProgram(program)
 
 # preparando espaço para 3 vértices usando 2 coordenadas (x,y)
-vertices = np.zeros(20, [("position", np.float32, 2)])
+vertices = np.zeros(36, [("position", np.float32, 2)])
 
 # preenchendo as coordenadas de cada vértice
 vertices[0] = [-0.2, -0.3]  #portao
@@ -68,26 +68,45 @@ vertices[1] = [-0.2, +1.0]
 vertices[2] = [+0.2, -0.3]
 vertices[3] = [+0.2, +1.0]
 
-vertices[4] = [-0.2, +0.8]  #riscos
+vertices[4] = [-0.2, +0.8]      #risco
 vertices[5] = [-0.2, +0.75]
 vertices[6] = [+0.2, +0.8]
 vertices[7] = [+0.2, +0.75]
 
-vertices[8] = [-0.2, +0.55] #risco azul
-vertices[9] = [-0.2, +0.4]
+vertices[8] = [-0.2, +0.55]     #risco
+vertices[9] = [-0.2, +0.50]
 vertices[10] = [+0.2, +0.55]
-vertices[11] = [+0.2, +0.4]
+vertices[11] = [+0.2, +0.50]
 
-vertices[12] = [-0.2, +0.2] #riscos
-vertices[13] = [-0.2, +0.15]
-vertices[14] = [+0.2, +0.2]
-vertices[15] = [+0.2, +0.15]
+vertices[12] = [-0.2, +0.3]     #risco
+vertices[13] = [-0.2, +0.25]
+vertices[14] = [+0.2, +0.3]
+vertices[15] = [+0.2, +0.25]
 
-vertices[16] = [-0.2, -0.05]    #riscos
-vertices[17] = [-0.2, -0.1]
-vertices[18] = [+0.2, -0.05]
-vertices[19] = [+0.2, -0.1]
-print(vertices)
+vertices[16] = [-0.2,  0.0]     #risco
+vertices[17] = [-0.2, +0.05]
+vertices[18] = [+0.2,  0.0]
+vertices[19] = [+0.2, +0.05]
+
+vertices[20] = [-0.08, +0.82]   #detalhe azul
+vertices[21] = [-0.08, +0.73]
+vertices[22] = [+0.08, +0.82]
+vertices[23] = [+0.08, +0.73]
+
+vertices[24] = [-0.08, +0.58]    #detalhe azul
+vertices[25] = [-0.08, +0.47]
+vertices[26] = [+0.08, +0.58]
+vertices[27] = [+0.08, +0.47]
+
+vertices[28] = [-0.08, +0.33]   #detalhe azul
+vertices[29] = [-0.08, +0.22]
+vertices[30] = [+0.08, +0.33]
+vertices[31] = [+0.08, +0.22]
+
+vertices[32] = [-0.08, -0.03]   #detalhe azul
+vertices[33] = [-0.08, +0.08]
+vertices[34] = [+0.08, -0.03]
+vertices[35] = [+0.08, +0.08]
 
 # Request a buffer slot from GPU
 buffer = glGenBuffers(1)
@@ -183,20 +202,20 @@ while not glfw.window_should_close(window):
     loc = glGetUniformLocation(program, "mat_transformation")
     glUniformMatrix4fv(loc, 1, GL_TRUE, mat_transformation)
     
+    glUniform4f(loc_color, 0.69, 0.572, 0.423, 1.0)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4) # portao
-    glUniform4f(loc_color, 0.4, 0.6, 0.2, 1.0)
 
+    glUniform4f(loc_color, 0.0, 0.0, 0.0, 1.0)
     glDrawArrays(GL_TRIANGLE_STRIP, 4, 4) # risco
-    glUniform4f(loc_color, 0.4, 0.1, 0.1, 1.0)
-
-    glDrawArrays(GL_TRIANGLE_STRIP, 8, 4) # risco azul
-    glUniform4f(loc_color, 0.4, 0.1, 0.1, 1.0)
-
+    glDrawArrays(GL_TRIANGLE_STRIP, 8, 4) # risco
     glDrawArrays(GL_TRIANGLE_STRIP, 12, 4) # risco
-    glUniform4f(loc_color, 0.4, 0.1, 0.1, 1.0)
-
     glDrawArrays(GL_TRIANGLE_STRIP, 16, 4) # risco
-    glUniform4f(loc_color, 0.1, 0.6, 0.2, 1.0)
+
+    glUniform4f(loc_color, 0.737, 0.925, 0.863, 1.0)
+    glDrawArrays(GL_TRIANGLE_STRIP, 20, 4) # detalhe azul
+    glDrawArrays(GL_TRIANGLE_STRIP, 24, 4) # detalhe azul
+    glDrawArrays(GL_TRIANGLE_STRIP, 28, 4) # detalhe azul
+    glDrawArrays(GL_TRIANGLE_STRIP, 32, 4) # detalhe azul
 
     glfw.swap_buffers(window)
 
