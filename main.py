@@ -59,7 +59,7 @@ def main():
             "type": GateObject,
             "items": [
                 # { "position":(51,350), "size":(100,60), "rotate":0, "props": { "hitbox": True } },
-                # { "position":(350,350), "size":(100,60), "rotate":90, "props": { "hitbox": True } },
+                { "position":(250,550), "size":(100,60), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         {

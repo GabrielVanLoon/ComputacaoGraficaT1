@@ -75,9 +75,9 @@ class GateObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__move_direction  = 0 if self.size[0] >= self.size[1] else 1
-        self.__delta_shrink = 0.1  # diminui/aumenta 0.1 px por iteração
-        self.__original_size = np.array([size[0], size[1]], dtype=np.float)
+        self.__move_direction  = 0 if self.size[0] <= self.size[1] else 1
+        self.__delta_shrink    = 0.1  # diminui/aumenta 0.1 px por iteração
+        self.__original_size   = np.array([size[0], size[1]], dtype=np.float)
         self.__original_position = np.array([position[0], position[1]], dtype=np.float)
 
 
@@ -131,7 +131,7 @@ class GateObject(GameObject):
         last_size     = self.size[self.__move_direction]
         
         # Realiza o movimento 
-        reference = self.__original_position[self.__move_direction] - self.__original_size[self.__move_direction]/2.0
+        reference = self.__original_position[self.__move_direction] + self.__original_size[self.__move_direction]/2.0
 
         self.size[self.__move_direction] += buttons.get(glfw.MOUSE_BUTTON_LEFT, {"action": 0})["action"] * self.__delta_shrink
         self.size[self.__move_direction] -= buttons.get(glfw.MOUSE_BUTTON_RIGHT, {"action": 0})["action"] * self.__delta_shrink
@@ -143,8 +143,10 @@ class GateObject(GameObject):
             self.size[self.__move_direction]  = self.__original_size[self.__move_direction]
 
         # Atualiza a posição
-        self.position[self.__move_direction] = (reference + self.size[self.__move_direction])/2.0
+        self.position[self.__move_direction] = reference - self.size[self.__move_direction]/2.0
         self.configure_hitbox()
+
+        print(reference, self.position)
 
         # Verificando se o movimento é válido
         # collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)
@@ -157,7 +159,7 @@ class GateObject(GameObject):
         # Se colidiu cancela o movimento e retorna estado anterior
         if collision:
             self.position[self.__move_direction] = last_position
-            self.size[self.__move_direction] = last_size
+            self.size[self.__move_direction]     = last_size
             self.configure_hitbox()
 
         self._configure_gl_variables()
