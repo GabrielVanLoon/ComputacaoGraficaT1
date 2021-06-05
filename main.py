@@ -47,12 +47,14 @@ def main():
                 { "position":(575,325), "size":(150,49), "rotate":0, "props": { "hitbox": True } },
                 { "position":(775,325), "size":(150,49), "rotate":180, "props": { "hitbox": True } },
                 { "position":(975,325), "size":(150,49), "rotate":0, "props": { "hitbox": True } },
+                
+
             ] 
         },
         {
             "type": ParedeSageObject,
             "items": [
-                # { "position":(50,450), "size":(100,100*.4), "rotate":0, "props": { "hitbox": True } },
+                { "position":(650,400), "size":(100,100*.3), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         {

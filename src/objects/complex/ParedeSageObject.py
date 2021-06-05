@@ -18,26 +18,44 @@ class ParedeSageObject(GameObject):
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
     shader_vertices = [ 
-        (-1.0, +1.0, 0.0),
+        (-1.0, +1.0, 0.0),  # esquerda
         (-1.0, -1.0, 0.0),
         (-0.5, +1.0, 0.0),
         (-0.5, -1.0, 0.0),
 
-        (-0.5, +1.0, 0.0),
+        (-0.5, +1.0, 0.0),  # esquerda centro
         (-0.5, -1.0, 0.0),
         ( 0.0, +1.0, 0.0),
         ( 0.0, -1.0, 0.0),
 
-        ( 0.0, +1.0, 0.0),
+        ( 0.0, +1.0, 0.0),  # direita centro
         ( 0.0, -1.0, 0.0),
         (+0.5, +1.0, 0.0),
         (+0.5, -1.0, 0.0),
 
-        (+0.5, +1.0, 0.0),
+        (+0.5, +1.0, 0.0),  # direita
         (+0.5, -1.0, 0.0),
         (+1.0, +1.0, 0.0),
         (+1.0, -1.0, 0.0),
+
+        (-0.55, +1.0, 0.0), # divisor esquerda
+        (-0.55, -1.0, 0.0),
+        (-0.45, +1.0, 0.0),
+        (-0.45, -1.0, 0.0),
+
+        (-0.05, +1.0, 0.0), # divisor central
+        (-0.05, -1.0, 0.0),
+        (+0.05, +1.0, 0.0),
+        (+0.05, -1.0, 0.0),
+
+        (+0.45, +1.0, 0.0), # divisor direita
+        (+0.45, -1.0, 0.0),
+        (+0.55, +1.0, 0.0),
+        (+0.55, -1.0, 0.0)
     ]
+    textures = ["textura1.png", "textura2.png"]
+    texture_id = []
+
 
     subscribe_keys = []
     
@@ -75,15 +93,16 @@ class ParedeSageObject(GameObject):
         # Send final matrix to the GPU unit
         ParedeSageObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
-        # Draw object steps
-        ParedeSageObject.shader_program.set4Float('u_color',[0.729, 0.596, 0.592, 1.0])
-        glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 0, 4) # container
-
-        ParedeSageObject.shader_program.set4Float('u_color',[0.314, 0.659, 0.482, 1.0])
+        ParedeSageObject.shader_program.set4Float('u_color',[0.414, 0.759, 0.582, 1.0])
         glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 0, 4) # esquerda
         glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 4, 4) # esquerda centro
         glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 8, 4) # direita centro
         glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 12, 4) # direita
+
+        ParedeSageObject.shader_program.set4Float('u_color',[0.314, 0.659, 0.482, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 16, 4) # divisor esquerda
+        glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 20, 4) # divisor central
+        glDrawArrays(GL_TRIANGLE_STRIP, ParedeSageObject.shader_offset + 24, 4) # divisor direita
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:

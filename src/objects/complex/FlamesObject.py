@@ -20,22 +20,29 @@ class FlamesObject(GameObject):
     shader_program  = Shader(vertex_code, fragment_code)
     shader_offset   = 0
     shader_vertices = []
-    subscribe_keys = []
-    num_vertices = 64
+    subscribe_keys  = []
+    num_vertices    = 128
 
     def get_vertices():
         pi = 3.14
         counter = 0
-        radius = 1.0
+        radius = 0.8
 
-        vertices = np.zeros(FlamesObject.num_vertices, [("position", np.float32, 2)])
+        # vertices = np.zeros(FlamesObject.num_vertices, [("position", np.float32, 2)])
 
         angle = 0.0
         for counter in range(FlamesObject.num_vertices):
             angle += 2*pi/FlamesObject.num_vertices 
-            x = math.cos(angle + math.sin(angle/20))*radius
-            y = math.sin(angle + random.random())*radius
+            x = math.cos(angle)*radius
+            y = math.sin(angle)*radius  
+            xd = math.degrees(x)
+            yd = math.degrees(y)
+            aux = math.atan2(xd, yd)
+            radius += math.sin(aux * 10.) * .04
+            x = math.cos(angle)*radius
+            y = math.sin(angle)*radius
             FlamesObject.shader_vertices += [(x,y,0.0)]
+
         return FlamesObject.shader_vertices
 
 

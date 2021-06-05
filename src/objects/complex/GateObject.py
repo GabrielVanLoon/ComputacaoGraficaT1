@@ -146,8 +146,6 @@ class GateObject(GameObject):
         self.position[self.__move_direction] = reference - self.size[self.__move_direction]/2.0
         self.configure_hitbox()
 
-        print(reference, self.position)
-
         # Verificando se o movimento é válido
         # collision |= hitbox_window_collider(self.position, self.size, self.window_resolution)
         for item in objects: 
