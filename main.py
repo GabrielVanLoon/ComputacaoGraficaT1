@@ -16,6 +16,7 @@ from src.objects.complex.ParedeSageObject import ParedeSageObject
 from src.objects.complex.GateObject import GateObject
 from src.objects.complex.RotatorObject import RotatorObject
 from src.objects.complex.FlamesObject import FlamesObject
+from src.objects.complex.FinishObject import FinishObject
 
 def main():
 
@@ -29,9 +30,6 @@ def main():
         {
             "type": BoxObject,
             "items": [
-                # Linha de Chegada -> Substituir
-                { "position":(250,150), "size":(90, 290), "rotate":0, "props": { "hitbox": True } },
-
                 { "position":(150, 50), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
                 { "position":(150,150), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
                 { "position":(150,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
@@ -93,12 +91,17 @@ def main():
                 { "position":(500,400), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
                 { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
                 
-                
                 { "position":(950,200), "size":(100,200), "rotate":0, "props": { "hitbox": True } },
-
 
                 { "position":(500,50), "size":(400,100), "rotate":0, "props": { "hitbox": True } },
                 { "position":(500,250), "size":(400,100), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": FinishObject,
+            "items": [
+                # Linha de Chegada -> Substituir
+                { "position":(250,150), "size":(90, 290), "rotate":0, "props": { "hitbox": True } }
             ] 
         },
     ]

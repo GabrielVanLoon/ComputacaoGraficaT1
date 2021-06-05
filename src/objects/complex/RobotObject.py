@@ -20,6 +20,7 @@ from src.objects.complex.GateObject import GateObject
 # Types used to trigger events on collide
 from src.objects.complex.RotatorObject import RotatorObject
 from src.objects.complex.FlamesObject import FlamesObject
+from src.objects.complex.FinishObject import FinishObject
 
 
 class RobotObject(GameObject):
@@ -227,6 +228,9 @@ class RobotObject(GameObject):
                 self.__delta_direction[1] = np.sin(rad)
             elif type(item) == FlamesObject and self.object_hitbox.check_collision(item.object_hitbox):
                 self.__dead = True
+                break
+            elif type(item) == FinishObject and self.object_hitbox.check_collision(item.object_hitbox):
+                self.__delta_translate = 0.0
                 break
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:
