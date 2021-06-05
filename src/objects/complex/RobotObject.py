@@ -145,7 +145,7 @@ class RobotObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__delta_translate = 0.1  # Moves 0.1 px each translation iteration
+        self.__delta_translate = 6 * 0.1  # Moves 0.1 px each translation iteration
         self.__delta_direction = np.array([0.0, 1.0], dtype=np.float) # Initial direction up
         self.__dead = False
     

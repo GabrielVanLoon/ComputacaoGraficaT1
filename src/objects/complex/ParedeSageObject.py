@@ -69,7 +69,7 @@ class ParedeSageObject(GameObject):
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
         self.__move_direction  = 0 if self.size[0] >= self.size[1] else 1
-        self.__delta_translate = 0.1  # Move 1 px each active iteration
+        self.__delta_translate = 6 * 0.1  # Move 1 px each active iteration
 
 
     def configure_hitbox(self) -> None:
