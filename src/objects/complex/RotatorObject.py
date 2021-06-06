@@ -5,7 +5,7 @@ import OpenGL.GL.shaders
 import glfw
 
 from src.shaders.Shader import Shader
-from src.shaders.BaseShader import vertex_code, fragment_code
+from src.shaders.TextureShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
 from src.colliders.Hitbox import Hitbox
 from src.helpers.vertex import generate_circle_vertexes
@@ -23,6 +23,8 @@ class RotatorObject(GameObject):
         ( 1.0,   1.0,  0.0),
         ( 1.0,  -1.0,  0.0),
     ]
+    shader_textures = ["assets/object_arrows_crop.jpg"]
+    shader_textures_ids = []
     subscribe_keys = []
     
 
@@ -59,17 +61,21 @@ class RotatorObject(GameObject):
         model_matrix = np.array(self._generate_model_matrix(), np.float32)
         self._gl_rotate = 0.0
         model_matrix_no_rot = np.array(self._generate_model_matrix(), np.float32)
-    
+        
+        # Set Texture id
+        glBindTexture(GL_TEXTURE_2D, RotatorObject.shader_textures_ids[0])
+
         # Draw object steps
         RotatorObject.shader_program.set4fMatrix('u_model_matrix', model_matrix_no_rot)
-        RotatorObject.shader_program.set4Float('u_color',[0.1, 0.1, 0.1, 0.2])
+        RotatorObject.shader_program.setFloat('u_opacity', 0.5)
         glDrawArrays(GL_TRIANGLE_STRIP, RotatorObject.shader_offset, 4)
 
         # Draw Internal Circle
         RotatorObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
-        RotatorObject.shader_program.set4Float('u_color',[1.0, 0.0, 0.0, 1.0])
+        RotatorObject.shader_program.setFloat('u_opacity', 1.0)
         glDrawArrays(GL_TRIANGLE_FAN, RotatorObject.shader_offset + 4, 32)
 
+        # Draw direction line (useless with texture :P)
         RotatorObject.shader_program.set4Float('u_color',[1.0, 1.0, 1.0, 1.0])
         glDrawArrays(GL_LINES, RotatorObject.shader_offset + 36, 2)
 
