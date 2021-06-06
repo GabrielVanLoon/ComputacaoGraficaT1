@@ -113,7 +113,7 @@ def main():
         },
     ]
 
-    game = GameController(title="Testing Game Controller", width=1200, height=650, enable3D=False, scheme=scene_scheme)
+    game = GameController(title="Minigame - Running Robot", width=1200, height=650, enable3D=False, scheme=scene_scheme)
     game.start()
 
 
