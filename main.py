@@ -16,6 +16,7 @@ from src.objects.complex.ParedeSageObject import ParedeSageObject
 from src.objects.complex.GateObject import GateObject
 from src.objects.complex.RotatorObject import RotatorObject
 from src.objects.complex.FlamesObject import FlamesObject
+from src.objects.complex.FinishObject import FinishObject
 
 def main():
 
@@ -47,37 +48,60 @@ def main():
                 { "position":(575,325), "size":(150,49), "rotate":0, "props": { "hitbox": True } },
                 { "position":(775,325), "size":(150,49), "rotate":180, "props": { "hitbox": True } },
                 { "position":(975,325), "size":(150,49), "rotate":0, "props": { "hitbox": True } },
-                
 
+                { "position":(425,425), "size":(49,150), "rotate":90, "props": { "hitbox": True } },
+                { "position":(725,575), "size":(49,150), "rotate":-90, "props": { "hitbox": True } },
+                { "position":(1025,425), "size":(49,150), "rotate":90, "props": { "hitbox": True } },
             ] 
         },
         {
             "type": ParedeSageObject,
             "items": [
-                { "position":(650,400), "size":(100,100*.3), "rotate":0, "props": { "hitbox": True } },
+                { "position":(775,425), "size":(50,150), "rotate":90, "props": { "hitbox": True } },
+                { "position":(1025,225), "size":(50,100), "rotate":90, "props": { "hitbox": True } },
             ] 
         },
         {
             "type": GateObject,
             "items": [
-                # { "position":(51,350), "size":(100,60), "rotate":0, "props": { "hitbox": True } },
-                { "position":(250,550), "size":(100,60), "rotate":0, "props": { "hitbox": True } },
+                { "position":(425,575), "size":(49,150),  "rotate":0, "props": { "hitbox": True } },
+                { "position":(1025,575), "size":(49,150), "rotate":0, "props": { "hitbox": True } },
             ] 
         },
         {
             "type": RotatorObject,
             "items": [
                 { "position":(60,500), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
-                # { "position":(400,250), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
-                # { "position":(400,350), "size":(100,100), "rotate":45, "props": { "hitbox": True } },
-                # { "position":(400,450), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+
+                { "position":(950,50), "size":(100,100), "rotate":180, "props": { "hitbox": True } },
+
+                { "position":(370,150), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+                { "position":(490,150), "size":(100,100), "rotate":45, "props": { "hitbox": True } },
+                { "position":(610,150), "size":(100,100), "rotate":90, "props": { "hitbox": True } },
+
             ] 
         },
         {
             "type": FlamesObject,
             "items": [
-                { "position":(50,600), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
                 { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+                { "position":(50,600), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+
+                { "position":(225,600), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+                { "position":(500,400), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+                { "position":(50,50), "size":(100,100), "rotate":0, "props": { "hitbox": True } },
+                
+                { "position":(950,200), "size":(100,200), "rotate":0, "props": { "hitbox": True } },
+
+                { "position":(500,50), "size":(400,100), "rotate":0, "props": { "hitbox": True } },
+                { "position":(500,250), "size":(400,100), "rotate":0, "props": { "hitbox": True } },
+            ] 
+        },
+        {
+            "type": FinishObject,
+            "items": [
+                # Linha de Chegada -> Substituir
+                { "position":(250,150), "size":(90, 290), "rotate":0, "props": { "hitbox": True } }
             ] 
         },
     ]

@@ -39,7 +39,7 @@ class RotatorObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__delta_rotate = 0.1  # Moves 0.1 degree each translation iteration
+        self.__delta_rotate = 6 * 0.1  # Moves 0.1 degree each translation iteration
 
     def configure_hitbox(self) -> None:
         """Define a hitbox"""

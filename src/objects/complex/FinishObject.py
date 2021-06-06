@@ -5,11 +5,11 @@ import OpenGL.GL.shaders
 import glfw
 
 from src.shaders.Shader import Shader
-from src.shaders.BaseShader import vertex_code, fragment_code
+from src.shaders.XadrezShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
 from src.colliders.Hitbox import Hitbox
 
-class Finish(GameObject):
+class FinishObject(GameObject):
     """
     Implementa a forma de uma linha de chegada retangular.
     """
@@ -27,7 +27,7 @@ class Finish(GameObject):
 
     def get_vertices():
         """Geração dos vértices do Robo"""
-        return Finish.shader_vertices
+        return FinishObject.shader_vertices
 
 
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
@@ -36,8 +36,8 @@ class Finish(GameObject):
 
     def configure_hitbox(self) -> None:
         """Define a hitbox"""
-        box_values = [ self.position[0]-self.size[0]/2, self.position[1]-self.size[1]/2, 
-                        self.size[0], self.size[1] ]
+        box_values = [ self.position[0]-0.2*self.size[0]/2, self.position[1]-self.size[1]/2, 
+                        0.2*self.size[0], self.size[1] ]
 
         if self.object_hitbox == None:
             self.object_hitbox = Hitbox("box", box_values)
@@ -51,10 +51,11 @@ class Finish(GameObject):
         model_matrix = np.array(self._generate_model_matrix(), np.float32)
 
         # Send final matrix to the GPU unit
-        Finish.shader_program.set4fMatrix('u_model_matrix', model_matrix)
+        FinishObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
         
         # Draw object steps
-        glDrawArrays(GL_TRIANGLE_STRIP, Finish.shader_offset, 4)
+        FinishObject.shader_program.set4Float('u_color',[1.0, 0.0, 0.0, 1.0])
+        glDrawArrays(GL_TRIANGLE_STRIP, FinishObject.shader_offset, 4)
 
 
     def logic(self, keys={}, buttons={}, objects=[]) -> None:

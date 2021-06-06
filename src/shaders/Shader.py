@@ -89,6 +89,13 @@ class Shader:
         glUniform1f(self.__uniforms[name], value)
 
 
+    def set2Float(self, name, value) -> None:
+        """Uniform Helper"""
+        if name not in self.__uniforms.keys():
+            self.__uniforms[name] = glGetUniformLocation(self.__program, name)
+        glUniform2f(self.__uniforms[name], value[0], value[1])
+
+
     def set3Float(self, name, value) -> None:
         """Uniform Helper"""
         if name not in self.__uniforms.keys():

@@ -145,7 +145,7 @@ class GameController:
                 glClear(GL_COLOR_BUFFER_BIT) 
             else:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
-            glClearColor(1.0, 1.0, 1.0, 1.0)
+            glClearColor(0.96, 0.96, 0.96, 1.0)
 
             # If key R pressed restart the game
             if self.__glfw_keys.get(glfw.KEY_R, {"action": 0})["action"]:

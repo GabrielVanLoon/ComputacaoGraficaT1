@@ -75,8 +75,8 @@ class GateObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
-        self.__move_direction  = 0 if self.size[0] <= self.size[1] else 1
-        self.__delta_shrink    = 0.1  # diminui/aumenta 0.1 px por iteração
+        self.__move_direction  = 0 if self.size[0] >= self.size[1] else 1
+        self.__delta_shrink    = 6 * 0.1  # diminui/aumenta 0.1 px por iteração
         self.__original_size   = np.array([size[0], size[1]], dtype=np.float)
         self.__original_position = np.array([position[0], position[1]], dtype=np.float)
 

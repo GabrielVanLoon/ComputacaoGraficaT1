@@ -7,7 +7,7 @@ import math
 import random
 
 from src.shaders.Shader import Shader
-from src.shaders.BaseShader import vertex_code, fragment_code
+from src.shaders.MagmaShader import vertex_code, fragment_code
 from src.objects.GameObject import GameObject
 from src.colliders.Hitbox import Hitbox
 from src.helpers.vertex import generate_random_circle_vertexes
@@ -49,6 +49,8 @@ class FlamesObject(GameObject):
     def __init__(self, position=(0,0), size=(200,200), rotate=0, window_resolution=(600,600)) -> None:
         super().__init__(position=position, size=size, rotate=rotate, window_resolution=window_resolution)
 
+        self.__u_time = 0.0
+
 
     def configure_hitbox(self) -> None:
         """Define a hitbox"""
@@ -68,6 +70,9 @@ class FlamesObject(GameObject):
 
         # Send final matrix to the GPU unit
         FlamesObject.shader_program.set4fMatrix('u_model_matrix', model_matrix)
+        FlamesObject.shader_program.setFloat('u_time', self.__u_time)
+        FlamesObject.shader_program.set2Float('u_resolution', [1200.0, 600.0])
+        self.__u_time += 0.0005
         
         # Draw object steps
         FlamesObject.shader_program.set4Float('u_color',[1.0,0.0,0.3,1.0])
