@@ -2,7 +2,7 @@
 import glfw
 import numpy as np
 from OpenGL.GL import *
-
+from PIL import Image
 
 from src.objects.GameObject import GameObject
 from src.objects.geometrics.TriangleObject import TriangleObject
@@ -39,6 +39,7 @@ class GameController:
         self.__configure_vertexes_and_keys()
         self.__configure_objects()
         self.__configure_buffer()
+        self.__configure_textures()
 
 
     def __configure_window(self) -> None:
@@ -107,6 +108,40 @@ class GameController:
         glBufferData(GL_ARRAY_BUFFER, self.__vertices.nbytes, self.__vertices, GL_STATIC_DRAW)
 
 
+    def __configure_textures(self) -> None:
+        """
+        Instantiate and initialize all textures used by te objects
+        """
+
+        # Calc. the sum number of textures needed and generate them
+        qtd_textures = 0
+        for object in self.scheme:
+            qtd_textures += len(object["type"].shader_textures)
+
+        # If no textures to create then exits
+        if qtd_textures == 0:
+            return 
+
+        # Init all the textures
+        texture_id = 1
+        glGenTextures(qtd_textures)
+        for object in self.scheme:
+            for texture in object["type"].shader_textures:
+                # Texture Settings
+                glBindTexture(GL_TEXTURE_2D, texture_id)
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+                # Load image and generate midmap
+                image = Image.open(texture)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.size[0], image.size[1], 0, GL_RGB, GL_UNSIGNED_BYTE, image.tobytes("raw", "RGB", 0, -1))
+                glGenerateMipmap(GL_TEXTURE_2D)
+                # Set id and increment
+                object["type"].shader_textures_ids.append(texture_id)
+                texture_id += 1
+
+
     def __key_event_handler(self, window, key, scancode, action, mods):
         """
         Manipula os eventos de teclados lidos pelo GLFW e salva as mudanças de estado 
@@ -145,7 +180,7 @@ class GameController:
                 glClear(GL_COLOR_BUFFER_BIT) 
             else:
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) 
-            glClearColor(0.96, 0.96, 0.96, 1.0)
+            glClearColor(0.709, 0.486, 0.443, 1.0)
 
             # If key R pressed restart the game
             if self.__glfw_keys.get(glfw.KEY_R, {"action": 0})["action"]:

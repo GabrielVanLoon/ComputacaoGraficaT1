@@ -17,6 +17,7 @@ from src.objects.complex.GateObject import GateObject
 from src.objects.complex.RotatorObject import RotatorObject
 from src.objects.complex.FlamesObject import FlamesObject
 from src.objects.complex.FinishObject import FinishObject
+from src.objects.complex.BackgroundObject import BackgroundObject
 
 def main():
 
@@ -102,6 +103,12 @@ def main():
             "items": [
                 # Linha de Chegada -> Substituir
                 { "position":(250,150), "size":(90, 290), "rotate":0, "props": { "hitbox": True } }
+            ] 
+        },
+        {
+            "type": BackgroundObject,
+            "items": [
+                { "position":(600,325), "size":(1250,650), "rotate":0 },
             ] 
         },
     ]

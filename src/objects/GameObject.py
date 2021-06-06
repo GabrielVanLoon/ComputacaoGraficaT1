@@ -25,6 +25,8 @@ class GameObject:
         ( 1.0,   1.0,  0.0),
         ( 1.0,  -1.0,  0.0),
     ]
+    shader_textures = []
+    shader_textures_ids = []
 
 
     def get_vertices():

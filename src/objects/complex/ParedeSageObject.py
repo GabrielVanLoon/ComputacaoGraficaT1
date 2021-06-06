@@ -53,10 +53,6 @@ class ParedeSageObject(GameObject):
         (+0.55, +1.0, 0.0),
         (+0.55, -1.0, 0.0)
     ]
-    textures = ["textura1.png", "textura2.png"]
-    texture_id = []
-
-
     subscribe_keys = []
     
 
